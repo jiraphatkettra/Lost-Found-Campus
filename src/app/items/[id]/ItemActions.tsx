@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   Clock,
   XCircle,
+  ShieldCheck,
 } from "lucide-react";
 
 export interface UserClaimSummary {
@@ -80,30 +81,33 @@ export function ItemActions({
     }
   };
 
-  // กรณีเป็นเจ้าของประกาศ
+  // 1. เจ้าของประกาศ (Owner Management Card)
   if (isOwner) {
     return (
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pt-5 sm:pt-6 border-t border-slate-100 dark:border-slate-800">
+      <div className="pt-4 sm:pt-5 border-t border-slate-100 dark:border-slate-800 space-y-3 sm:space-y-4">
+        {/* Status Changer Segmented Control */}
         <StatusChanger itemId={itemId} initialStatus={initialStatus} />
 
-        <div className="flex items-center gap-2 self-stretch sm:self-auto justify-end">
+        {/* Dedicated 2-Column Action Buttons: Always 100% visible, never cut off */}
+        <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
           <Link
             href={`/items/${itemId}/edit`}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 transition"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-2.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 hover:border-blue-400 dark:hover:border-blue-500 shadow-2xs transition active:scale-95"
           >
-            <Pencil className="w-3.5 h-3.5" />
-            <span>แก้ไข</span>
+            <Pencil className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+            <span>แก้ไขประกาศ</span>
           </Link>
           <button
             type="button"
             onClick={() => setDeleteModalOpen(true)}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-2.5 rounded-xl text-xs font-bold border border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:border-rose-300 shadow-2xs transition active:scale-95 cursor-pointer"
           >
-            <Trash2 className="w-3.5 h-3.5" />
+            <Trash2 className="w-3.5 h-3.5 shrink-0" />
             <span>ลบประกาศ</span>
           </button>
         </div>
 
+        {/* Delete Confirmation Modal */}
         <Modal
           isOpen={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
@@ -145,18 +149,18 @@ export function ItemActions({
     );
   }
 
-  // กรณีผู้ใช้ทั่วไป (ไม่ใช่เจ้าของ)
+  // 2. ผู้ใช้ทั่วไป (Non-Owner Actions)
   const isLost = itemType === "LOST";
   const claimButtonLabel = isLost ? "ฉันเจอของชิ้นนี้" : "นี่คือของของฉัน";
 
   return (
-    <div className="space-y-4 pt-6 border-t border-slate-100 dark:border-slate-800">
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+    <div className="space-y-3 pt-4 sm:pt-5 border-t border-slate-100 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3">
         {/* Claim Action / Status */}
         {!isLoggedIn ? (
           <Link
             href={`/login?callbackUrl=/items/${itemId}`}
-            className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-600/20 transition active:scale-95 text-center"
+            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition active:scale-95 text-center"
           >
             <LogIn className="w-4 h-4" />
             <span>เข้าสู่ระบบเพื่อ{claimButtonLabel}</span>
@@ -195,10 +199,10 @@ export function ItemActions({
         ) : (
           <Button
             variant="primary"
-            size="lg"
+            size="md"
             onClick={() => setClaimModalOpen(true)}
-            className="flex-1 justify-center py-3 text-sm font-bold shadow-md shadow-blue-600/20"
-            leftIcon={<HandHelping className="w-5 h-5" />}
+            className="flex-1 justify-center py-2.5 sm:py-3 text-xs sm:text-sm font-bold shadow-md shadow-blue-600/20"
+            leftIcon={<HandHelping className="w-4 h-4 sm:w-5 sm:h-5" />}
           >
             {claimButtonLabel}
           </Button>
@@ -209,11 +213,11 @@ export function ItemActions({
           <button
             type="button"
             onClick={() => setReportModalOpen(true)}
-            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 text-xs font-semibold transition cursor-pointer shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 text-xs font-semibold transition cursor-pointer shrink-0"
             title="รายงานประกาศนี้"
           >
             <Flag className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">รายงาน</span>
+            <span className="inline sm:inline">รายงาน</span>
           </button>
         )}
       </div>

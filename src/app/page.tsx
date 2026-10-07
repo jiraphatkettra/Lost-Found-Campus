@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { Hero } from "@/components/home/Hero";
 import { StatsStrip } from "@/components/home/StatsStrip";
 import { HowItWorks } from "@/components/home/HowItWorks";
-import { ItemCard } from "@/components/feature/ItemCard";
+import { RecentItemsSlider } from "@/components/home/RecentItemsSlider";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ArrowRight, Sparkles, PlusCircle } from "lucide-react";
 import { ItemCardData } from "@/types";
@@ -103,11 +103,7 @@ export default async function HomePage() {
             }}
           />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {latestItems.map((item) => (
-              <ItemCard key={item.id} item={item as unknown as ItemCardData} />
-            ))}
-          </div>
+          <RecentItemsSlider items={latestItems as unknown as ItemCardData[]} />
         )}
       </section>
 

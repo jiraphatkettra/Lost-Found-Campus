@@ -100,36 +100,36 @@ export function ClaimCard({
   };
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition space-y-3.5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
+    <div className="p-3.5 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition space-y-3">
+      <div className="flex items-start justify-between gap-2.5">
+        <div className="flex items-center gap-2.5 min-w-0">
           <Avatar
             src={claim.claimant?.image}
             name={claim.claimant?.name || "ผู้ใช้"}
-            size="md"
+            size="sm"
           />
-          <div>
-            <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <div className="min-w-0">
+            <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
               {claim.claimant?.name || "ผู้ใช้งาน"}
             </h4>
-            <span className="text-xs text-slate-500 dark:text-slate-400">
+            <span className="text-3xs sm:text-xs text-slate-400">
               {formatRelativeTime(claim.createdAt)}
             </span>
           </div>
         </div>
-        <div>{getStatusBadge()}</div>
+        <div className="shrink-0">{getStatusBadge()}</div>
       </div>
 
-      <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2.5">
-        <MessageSquare className="w-4 h-4 shrink-0 text-slate-400 mt-0.5" />
-        <p className="whitespace-pre-line leading-relaxed">{claim.message}</p>
+      <div className="p-2.5 sm:p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl text-xs sm:text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+        <MessageSquare className="w-3.5 h-3.5 shrink-0 text-slate-400 mt-0.5" />
+        <p className="whitespace-pre-line leading-relaxed break-words">{claim.message}</p>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-        <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400">
-          <Phone className="w-3.5 h-3.5 text-slate-400" />
-          <span className="font-medium">ข้อมูลติดต่อผู้ขอ:</span>
-          <span className="font-semibold text-slate-900 dark:text-slate-100 select-all">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1">
+        <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400">
+          <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <span className="font-medium text-2xs sm:text-xs">ติดต่อ:</span>
+          <span className="font-semibold text-slate-900 dark:text-slate-100 select-all font-mono text-xs">
             {claim.claimantContact}
           </span>
         </div>

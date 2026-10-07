@@ -10,6 +10,7 @@ import { MatchSuggestions } from "@/components/feature/MatchSuggestions";
 import { ItemActions } from "./ItemActions";
 import { ClaimCard } from "@/components/feature/ClaimCard";
 import { ShareButton } from "@/components/feature/ShareButton";
+import { ContactCard } from "@/components/feature/ContactCard";
 import { Avatar } from "@/components/ui/Avatar";
 import { canViewItemContact } from "@/lib/contact-visibility";
 import { formatRelativeTime, formatThaiDate } from "@/lib/date";
@@ -206,7 +207,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
       <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
           {/* Left Column (Images/Placeholder) 60% on desktop (col-span-7) */}
-          <div className="lg:col-span-7 relative min-h-[240px] sm:min-h-[380px] lg:min-h-[520px] bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800">
+          <div className="lg:col-span-7 relative aspect-4/3 sm:aspect-auto sm:min-h-[360px] lg:min-h-[520px] bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800">
             {item.imageUrl ? (
               <Image
                 src={item.imageUrl}
@@ -218,10 +219,10 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
               />
             ) : (
               <div
-                className={`w-full h-full min-h-[240px] sm:min-h-[380px] lg:min-h-[520px] bg-gradient-to-br ${placeholderConfig.gradient} flex flex-col items-center justify-center text-white/90 p-6 sm:p-8`}
+                className={`w-full h-full aspect-4/3 sm:aspect-auto sm:min-h-[360px] lg:min-h-[520px] bg-gradient-to-br ${placeholderConfig.gradient} flex flex-col items-center justify-center text-white/90 p-4 sm:p-8`}
               >
                 {getCategoryVectorIcon(item.category)}
-                <span className="text-xs sm:text-sm font-bold mt-3 tracking-wide uppercase opacity-90">
+                <span className="text-xs sm:text-sm font-bold mt-2.5 sm:mt-3 tracking-wide uppercase opacity-90">
                   {categoryName}
                 </span>
                 <span className="text-2xs sm:text-xs text-white/70 mt-0.5">
@@ -232,10 +233,10 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
           </div>
 
           {/* Right Column (Info) 40% on desktop (col-span-5) */}
-          <div className="lg:col-span-5 p-4 sm:p-6 lg:p-8 flex flex-col justify-between space-y-5 sm:space-y-6">
-            <div className="space-y-4 sm:space-y-5">
+          <div className="lg:col-span-5 p-3.5 sm:p-6 lg:p-8 flex flex-col justify-between space-y-4 sm:space-y-6">
+            <div className="space-y-3.5 sm:space-y-5">
               {/* Badges + Share */}
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between gap-2.5">
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <TypeBadge type={item.type} />
                   <StatusBadge status={item.status} />
@@ -244,7 +245,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
               </div>
 
               {/* Title (H1) */}
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+              <h1 className="text-lg sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug">
                 {item.title}
               </h1>
 
@@ -304,22 +305,11 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
 
               {/* Contact Information (ตามกฎการเปิดเผย Section 4.1) */}
               {canSeeContact ? (
-                <div className="p-4 rounded-2xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-emerald-950/30 space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 dark:text-emerald-300">
-                    <Phone className="w-4 h-4" />
-                    <span>ข้อมูลติดต่อเจ้าของประกาศ</span>
-                  </div>
-                  <p className="text-base font-bold text-emerald-900 dark:text-emerald-200 select-all font-mono">
-                    {item.contact}
-                  </p>
-                  <p className="text-2xs text-emerald-700 dark:text-emerald-400">
-                    * คุณสามารถติดต่อเพื่อส่งมอบสิ่งของได้ทันที
-                  </p>
-                </div>
+                <ContactCard contact={item.contact} />
               ) : (
-                <div className="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-center gap-2.5 text-xs text-slate-500 dark:text-slate-400">
+                <div className="p-3 sm:p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-center gap-2.5 text-xs text-slate-500 dark:text-slate-400">
                   <Lock className="w-4 h-4 text-slate-400 shrink-0" />
-                  <span>
+                  <span className="leading-relaxed">
                     ข้อมูลติดต่อจะแสดงเมื่อคุณส่งคำขอ (Claim) และได้รับการตอบรับจากเจ้าของ
                   </span>
                 </div>
@@ -342,16 +332,16 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
 
       {/* Owner Claims List Section (ถ้าเป็นเจ้าของประกาศ) */}
       {isOwner && (
-        <section className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 space-y-6">
+        <section className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-slate-200 dark:border-slate-800 space-y-4 sm:space-y-6">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-blue-50 dark:bg-blue-950/50 rounded-xl text-blue-600 dark:text-blue-400">
-              <Inbox className="w-5 h-5" />
+            <div className="p-1.5 sm:p-2 bg-blue-50 dark:bg-blue-950/50 rounded-xl text-blue-600 dark:text-blue-400 shrink-0">
+              <Inbox className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                 คำขอที่ได้รับ ({claimsList.length})
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400">
                 รายการคำขอยืนยันความเป็นเจ้าของหรือการพบของจากผู้ใช้งานอื่น
               </p>
             </div>

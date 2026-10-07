@@ -92,20 +92,20 @@ export function ItemCard({ item }: ItemCardProps) {
       </div>
 
       {/* Content Area */}
-      <div className="p-4 sm:p-5 flex flex-col justify-between">
+      <div className="p-3.5 sm:p-5 flex flex-col justify-between">
         <div>
-          <span className="inline-block text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
+          <span className="inline-block text-3xs sm:text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
             {categoryName}
           </span>
-          <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1 mb-1.5">
+          <h3 className="text-xs sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1 mb-1">
             {item.title}
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-4 leading-relaxed">
+          <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-2.5 sm:mb-4 leading-relaxed">
             {item.description}
           </p>
         </div>
 
-        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+        <div className="pt-2 sm:pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs sm:text-xs text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-1.5 truncate max-w-[55%]">
             <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">{locationName}</span>

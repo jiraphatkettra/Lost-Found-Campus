@@ -90,10 +90,10 @@ export function FilterBar() {
     ITEM_STATUSES.find((s) => s.value === val)?.label || val;
 
   return (
-    <div className="space-y-3 mb-8">
-      {/* Main Filter Bar */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 transition-colors">
-        {/* Top Controls: Search and Mobile Filter Trigger */}
+    <div className="space-y-3 mb-6 sm:mb-8">
+      {/* Main Filter Card */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200 dark:border-slate-800 p-3 sm:p-4 transition-colors">
+        {/* Top Controls: Search Input + Sort + Filter Trigger */}
         <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Search Box */}
           <div className="relative flex-1 min-w-0">
@@ -107,7 +107,7 @@ export function FilterBar() {
             />
           </div>
 
-          {/* Sort Dropdown */}
+          {/* Quick Sort Dropdown (Tablet & Desktop) */}
           <div className="hidden sm:flex items-center shrink-0">
             <select
               value={currentSort}
@@ -120,8 +120,8 @@ export function FilterBar() {
             </select>
           </div>
 
-          {/* Mobile Filter Button (<lg) */}
-          <div className="lg:hidden shrink-0">
+          {/* Filter Modal Trigger Button */}
+          <div className="shrink-0">
             <Button
               variant={activeFiltersCount > 0 ? "primary" : "outline"}
               size="sm"
@@ -139,104 +139,88 @@ export function FilterBar() {
           </div>
         </div>
 
-        {/* Desktop Filters (>=lg) */}
-        <div className="hidden lg:flex items-center justify-between gap-3 pt-3 mt-3 border-t border-slate-100 dark:border-slate-800">
-          {/* Type Segmented Control */}
-          <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">
-            <button
-              type="button"
-              onClick={() => updateFilter("type", "")}
-              className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                currentType === ""
-                  ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50 shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
-              }`}
-            >
-              ทั้งหมด
-            </button>
-            <button
-              type="button"
-              onClick={() => updateFilter("type", "LOST")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                currentType === "LOST"
-                  ? "bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-rose-600"
-              }`}
-            >
-              <PackageSearch className="w-3.5 h-3.5" /> ของหาย
-            </button>
-            <button
-              type="button"
-              onClick={() => updateFilter("type", "FOUND")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                currentType === "FOUND"
-                  ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-indigo-600"
-              }`}
-            >
-              <Gift className="w-3.5 h-3.5" /> ของที่พบ
-            </button>
-          </div>
+        {/*
+          Horizontal Scrollable Quick Filter Chips Bar
+          Works effortlessly on Mobile, Tablet & Desktop!
+          Allows users on mobile & tablet to filter by Type or Category with a single touch.
+        */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pt-2.5 mt-2.5 border-t border-slate-100 dark:border-slate-800 scrollbar-none no-scrollbar">
+          {/* All */}
+          <button
+            type="button"
+            onClick={() => updateFilter("type", "")}
+            className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer ${
+              currentType === "" && !currentCategory
+                ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs"
+                : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900"
+            }`}
+          >
+            ทั้งหมด
+          </button>
 
-          {/* Category, Location, Status Dropdowns */}
-          <div className="flex items-center gap-2">
-            <select
-              value={currentCategory}
-              onChange={(e) => updateFilter("category", e.target.value)}
-              aria-label="เลือกหมวดหมู่"
-              className="py-1.5 px-3 text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700 dark:text-slate-300 cursor-pointer"
-            >
-              <option value="">ทุกหมวดหมู่</option>
-              {CATEGORIES.map((c) => (
-                <option key={c.value} value={c.value}>
-                  {c.label}
-                </option>
-              ))}
-            </select>
+          {/* Lost */}
+          <button
+            type="button"
+            onClick={() => updateFilter("type", "LOST")}
+            className={`shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer ${
+              currentType === "LOST"
+                ? "bg-rose-600 text-white shadow-xs"
+                : "bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200/60 dark:border-rose-900/40"
+            }`}
+          >
+            <PackageSearch className="w-3.5 h-3.5" />
+            <span>ของหาย</span>
+          </button>
 
-            <select
-              value={currentLocation}
-              onChange={(e) => updateFilter("location", e.target.value)}
-              aria-label="เลือกสถานที่"
-              className="py-1.5 px-3 text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700 dark:text-slate-300 cursor-pointer"
-            >
-              <option value="">ทุกสถานที่ / อาคาร</option>
-              {LOCATIONS.map((l) => (
-                <option key={l.value} value={l.value}>
-                  {l.label}
-                </option>
-              ))}
-            </select>
+          {/* Found */}
+          <button
+            type="button"
+            onClick={() => updateFilter("type", "FOUND")}
+            className={`shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer ${
+              currentType === "FOUND"
+                ? "bg-indigo-600 text-white shadow-xs"
+                : "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-900/40"
+            }`}
+          >
+            <Gift className="w-3.5 h-3.5" />
+            <span>ของที่พบ</span>
+          </button>
 
-            <select
-              value={currentStatus}
-              onChange={(e) => updateFilter("status", e.target.value)}
-              aria-label="เลือกสถานะ"
-              className="py-1.5 px-3 text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700 dark:text-slate-300 cursor-pointer"
-            >
-              <option value="">ทุกสถานะ</option>
-              {ITEM_STATUSES.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <span className="w-px h-4 bg-slate-200 dark:bg-slate-700 shrink-0 mx-1" />
+
+          {/* Category Chips */}
+          {CATEGORIES.map((c) => {
+            const isCatActive = currentCategory === c.value;
+            return (
+              <button
+                key={c.value}
+                type="button"
+                onClick={() => updateFilter("category", isCatActive ? "" : c.value)}
+                className={`shrink-0 px-2.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap ${
+                  isCatActive
+                    ? "bg-blue-600 text-white shadow-xs font-semibold"
+                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 hover:bg-slate-200/60"
+                }`}
+              >
+                {c.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Active Filter Chips */}
+      {/* Active Filter Badges */}
       {activeFiltersCount > 0 && (
-        <div className="flex flex-wrap items-center gap-2 pt-1 px-1">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-1 px-1">
           <span className="text-xs text-slate-400 font-medium">ตัวกรอง:</span>
 
           {currentType && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
               {currentType === "LOST" ? "ของหาย" : "ของที่พบ"}
               <button
                 type="button"
                 onClick={() => removeSingleFilter("type")}
-                className="hover:text-blue-900 cursor-pointer"
+                className="hover:text-blue-900 cursor-pointer ml-0.5"
                 aria-label="ลบตัวกรองประเภท"
               >
                 <X className="w-3 h-3" />
@@ -245,12 +229,12 @@ export function FilterBar() {
           )}
 
           {currentCategory && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900">
               {getCategoryLabel(currentCategory)}
               <button
                 type="button"
                 onClick={() => removeSingleFilter("category")}
-                className="hover:text-purple-900 cursor-pointer"
+                className="hover:text-purple-900 cursor-pointer ml-0.5"
                 aria-label="ลบตัวกรองหมวดหมู่"
               >
                 <X className="w-3 h-3" />
@@ -259,12 +243,12 @@ export function FilterBar() {
           )}
 
           {currentLocation && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900">
               {getLocationLabel(currentLocation)}
               <button
                 type="button"
                 onClick={() => removeSingleFilter("location")}
-                className="hover:text-emerald-900 cursor-pointer"
+                className="hover:text-emerald-900 cursor-pointer ml-0.5"
                 aria-label="ลบตัวกรองสถานที่"
               >
                 <X className="w-3 h-3" />
@@ -273,12 +257,12 @@ export function FilterBar() {
           )}
 
           {currentStatus && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900">
               {getStatusLabel(currentStatus)}
               <button
                 type="button"
                 onClick={() => removeSingleFilter("status")}
-                className="hover:text-amber-900 cursor-pointer"
+                className="hover:text-amber-900 cursor-pointer ml-0.5"
                 aria-label="ลบตัวกรองสถานะ"
               >
                 <X className="w-3 h-3" />
@@ -287,12 +271,12 @@ export function FilterBar() {
           )}
 
           {searchTerm && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
               &quot;{searchTerm}&quot;
               <button
                 type="button"
                 onClick={() => removeSingleFilter("q")}
-                className="hover:text-slate-900 cursor-pointer"
+                className="hover:text-slate-900 cursor-pointer ml-0.5"
                 aria-label="ลบคำค้นหา"
               >
                 <X className="w-3 h-3" />
@@ -310,11 +294,11 @@ export function FilterBar() {
         </div>
       )}
 
-      {/* Mobile Filters Modal */}
+      {/* Advanced Filters Modal (Accessible on all screens) */}
       <Modal
         isOpen={isMobileModalOpen}
         onClose={() => setIsMobileModalOpen(false)}
-        title="ตัวกรองการค้นหา"
+        title="ตัวกรองและเรียงลำดับ"
       >
         <div className="space-y-4 pt-1">
           {/* Type Filter */}
@@ -353,7 +337,7 @@ export function FilterBar() {
               value={currentCategory}
               onChange={(e) => updateFilter("category", e.target.value)}
               aria-label="เลือกหมวดหมู่ในโมดัล"
-              className="w-full py-2.5 px-3.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100"
+              className="w-full py-2.5 px-3.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100"
             >
               <option value="">ทุกหมวดหมู่</option>
               {CATEGORIES.map((c) => (
@@ -367,13 +351,13 @@ export function FilterBar() {
           {/* Location */}
           <div>
             <label className="block text-xs font-bold uppercase text-slate-500 mb-2">
-              สถานที่
+              สถานที่ / อาคาร
             </label>
             <select
               value={currentLocation}
               onChange={(e) => updateFilter("location", e.target.value)}
               aria-label="เลือกสถานที่ในโมดัล"
-              className="w-full py-2.5 px-3.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100"
+              className="w-full py-2.5 px-3.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100"
             >
               <option value="">ทุกสถานที่ / อาคาร</option>
               {LOCATIONS.map((l) => (
@@ -387,13 +371,13 @@ export function FilterBar() {
           {/* Status */}
           <div>
             <label className="block text-xs font-bold uppercase text-slate-500 mb-2">
-              สถานะ
+              สถานะประกาศ
             </label>
             <select
               value={currentStatus}
               onChange={(e) => updateFilter("status", e.target.value)}
               aria-label="เลือกสถานะในโมดัล"
-              className="w-full py-2.5 px-3.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100"
+              className="w-full py-2.5 px-3.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100"
             >
               <option value="">ทุกสถานะ</option>
               {ITEM_STATUSES.map((s) => (
@@ -435,7 +419,7 @@ export function FilterBar() {
             </div>
           </div>
 
-          <div className="flex gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
             <Button
               variant="outline"
               size="md"

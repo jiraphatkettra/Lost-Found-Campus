@@ -53,16 +53,16 @@ export function MatchSuggestions({ itemId }: MatchSuggestionsProps) {
   if (error) return null;
 
   return (
-    <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
-      <div className="flex items-center gap-2.5 mb-6">
-        <div className="p-2 bg-amber-50 dark:bg-amber-950/50 rounded-xl text-amber-600 dark:text-amber-400">
-          <Sparkles className="w-5 h-5" />
+    <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-slate-200 dark:border-slate-800">
+      <div className="flex items-center gap-2 sm:gap-2.5 mb-4 sm:mb-6">
+        <div className="p-1.5 sm:p-2 bg-amber-50 dark:bg-amber-950/50 rounded-xl text-amber-600 dark:text-amber-400 shrink-0">
+          <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
             รายการที่อาจตรงกัน
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400">
             ระบบคำนวณจากหมวดหมู่ สถานที่ และช่วงเวลาที่ใกล้เคียงกัน
           </p>
         </div>

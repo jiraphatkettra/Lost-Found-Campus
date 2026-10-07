@@ -2,20 +2,49 @@
 
 import React, { useState, useOptimistic, useTransition } from "react";
 import { ItemStatus } from "@prisma/client";
-import { ITEM_STATUSES } from "@/lib/constants";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Check, Search, ArchiveRestore } from "lucide-react";
+import { Check, Search, ArchiveRestore, RefreshCw } from "lucide-react";
 
 export interface StatusChangerProps {
   itemId: string;
   initialStatus: ItemStatus;
 }
 
+const STATUS_CONFIG: Array<{
+  value: ItemStatus;
+  label: string;
+  shortLabel: string;
+  icon: typeof Search;
+  activeColor: string;
+}> = [
+  {
+    value: "SEARCHING",
+    label: "กำลังตามหา",
+    shortLabel: "ตามหา",
+    icon: Search,
+    activeColor: "bg-amber-500 text-white shadow-xs",
+  },
+  {
+    value: "FOUND",
+    label: "พบของแล้ว",
+    shortLabel: "พบแล้ว",
+    icon: Check,
+    activeColor: "bg-blue-600 text-white shadow-xs",
+  },
+  {
+    value: "RETURNED",
+    label: "ส่งคืนเรียบร้อย",
+    shortLabel: "ส่งคืนแล้ว",
+    icon: ArchiveRestore,
+    activeColor: "bg-emerald-600 text-white shadow-xs",
+  },
+];
+
 export function StatusChanger({ itemId, initialStatus }: StatusChangerProps) {
   const router = useRouter();
   const [currentStatus, setCurrentStatus] = useState<ItemStatus>(initialStatus);
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const [optimisticStatus, setOptimisticStatus] = useOptimistic(
     currentStatus,
@@ -53,40 +82,38 @@ export function StatusChanger({ itemId, initialStatus }: StatusChangerProps) {
     });
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "SEARCHING":
-        return <Search className="w-3.5 h-3.5" />;
-      case "FOUND":
-        return <Check className="w-3.5 h-3.5" />;
-      case "RETURNED":
-        return <ArchiveRestore className="w-3.5 h-3.5" />;
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
-      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-        ปรับสถานะ:
-      </span>
-      <div className="flex w-full sm:w-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 p-1 shadow-2xs">
-        {ITEM_STATUSES.map((s) => {
+    <div className="space-y-1.5 w-full">
+      <div className="flex items-center justify-between text-xs">
+        <span className="font-semibold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+          <span>ปรับเปลี่ยนสถานะประกาศ:</span>
+          {isPending && (
+            <RefreshCw className="w-3 h-3 text-blue-500 animate-spin" />
+          )}
+        </span>
+        <span className="text-2xs text-slate-400">คลิกเพื่ออัปเดต</span>
+      </div>
+
+      {/* Segmented Control Bar (Full width, responsive labels so no overflow on mobile) */}
+      <div className="flex w-full rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-800/80 p-1 shadow-2xs">
+        {STATUS_CONFIG.map((s) => {
           const isSelected = optimisticStatus === s.value;
+          const Icon = s.icon;
+
           return (
             <button
               key={s.value}
               type="button"
-              onClick={() => handleStatusChange(s.value as ItemStatus)}
-              className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 text-2xs min-[360px]:text-xs font-semibold rounded-lg transition cursor-pointer whitespace-nowrap ${
+              onClick={() => handleStatusChange(s.value)}
+              className={`flex-1 min-w-0 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 py-1.5 sm:py-2 text-2xs min-[360px]:text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                 isSelected
-                  ? "bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                  ? s.activeColor
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-700/50"
               }`}
             >
-              {getStatusIcon(s.value)}
-              {s.label}
+              <Icon className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate min-[400px]:hidden">{s.shortLabel}</span>
+              <span className="truncate hidden min-[400px]:inline">{s.label}</span>
             </button>
           );
         })}

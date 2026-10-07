@@ -123,8 +123,8 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
         </Link>
       </div>
 
-      {/* Filter Component (Sticky on large screen) */}
-      <div className="sticky top-16 z-20">
+      {/* Filter Component (Sticky on tablet/desktop, natural flow on mobile) */}
+      <div className="static sm:sticky sm:top-16 z-20">
         <Suspense
           fallback={
             <div className="h-20 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-2xl mb-8" />
