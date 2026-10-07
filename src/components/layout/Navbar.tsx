@@ -50,20 +50,22 @@ export function Navbar() {
           scrolled ? "shadow-sm dark:shadow-slate-950/40" : ""
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16 gap-3 sm:gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
+          <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
             {/* Left: Logo & Nav Links */}
-            <div className="flex items-center gap-3 xl:gap-6 shrink-0">
+            <div className="flex items-center gap-2 sm:gap-3 xl:gap-6 shrink-0">
               {/* Logo */}
               <Link
                 href="/"
-                className="inline-flex items-center gap-2.5 group shrink-0 whitespace-nowrap"
+                className="inline-flex items-center gap-2 sm:gap-2.5 group shrink-0 whitespace-nowrap"
               >
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
-                  <SearchCheck className="w-5 h-5" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform shrink-0">
+                  <SearchCheck className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
-                <span className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
-                  Lost & Found <span className="text-blue-600">Campus</span>
+                <span className="font-extrabold text-sm min-[380px]:text-base sm:text-lg text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
+                  <span className="hidden min-[380px]:inline">Lost & Found </span>
+                  <span className="min-[380px]:hidden">L&F </span>
+                  <span className="text-blue-600">Campus</span>
                 </span>
               </Link>
 
@@ -99,7 +101,7 @@ export function Navbar() {
             </form>
 
             {/* Right actions */}
-            <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
               {/* CTA Dropdown "+ แจ้งใหม่" (Desktop) */}
               <div className="hidden sm:block shrink-0">
                 <Dropdown
@@ -137,11 +139,13 @@ export function Navbar() {
 
               {/* Auth state: Notification + UserMenu OR Login Button */}
               {status === "loading" ? (
-                <div className="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse" />
               ) : session?.user ? (
                 <>
                   <NotificationBell />
-                  <UserMenu user={session.user as any} />
+                  <div className="hidden sm:block">
+                    <UserMenu user={session.user as any} />
+                  </div>
                 </>
               ) : (
                 <Link
