@@ -94,11 +94,11 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-12">
       {/* Page Header (Section 7.3: ชื่อ + คำอธิบาย + จำนวนผลลัพธ์) */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
+          <div className="flex items-center gap-2 mb-1">
             <span className="p-1.5 bg-blue-50 dark:bg-blue-950/60 rounded-lg text-blue-600 dark:text-blue-400">
               <Layers className="w-4 h-4" />
             </span>
@@ -106,7 +106,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
               พบ {total} รายการ
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             รายการของหายและของที่พบ
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -116,7 +116,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
 
         <Link
           href="/items/new"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition active:scale-95 self-start sm:self-auto shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition active:scale-95 w-full sm:w-auto shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>สร้างประกาศใหม่</span>
@@ -165,7 +165,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
       ) : (
         <>
           {/* Items Grid: Mobile 1 col, Tablet 2 cols, Desktop 3 cols */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {items.map((item) => (
               <ItemCard key={item.id} item={item} />
             ))}

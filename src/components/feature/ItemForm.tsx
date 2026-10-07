@@ -68,9 +68,9 @@ export function ItemForm({
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
   return (
-    <form onSubmit={handleSubmit(handleValidSubmit)} className="space-y-8">
+    <form onSubmit={handleSubmit(handleValidSubmit)} className="space-y-6 sm:space-y-8">
       {/* หมวดที่ 1: ข้อมูลสิ่งของ */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-5">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
         <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-100">
           <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           <h3 className="font-bold text-base">ข้อมูลสิ่งของ</h3>
@@ -82,9 +82,9 @@ export function ItemForm({
           error={errors.type?.message as string | undefined}
           required
         >
-          <div className="grid grid-cols-2 gap-3 mt-1">
+          <div className="grid grid-cols-1 min-[380px]:grid-cols-2 gap-2 sm:gap-3 mt-1">
             <label
-              className={`flex items-center justify-center gap-2 p-3.5 rounded-xl border cursor-pointer font-semibold text-sm transition ${
+              className={`flex items-center justify-center gap-2 px-3 py-3 sm:px-4 sm:py-3.5 rounded-xl border cursor-pointer font-semibold text-xs min-[380px]:text-sm transition ${
                 selectedType === "LOST"
                   ? "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 shadow-xs"
                   : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750"
@@ -96,11 +96,11 @@ export function ItemForm({
                 {...register("type")}
                 className="sr-only"
               />
-              <PackageSearch className="w-4 h-4" />
-              <span>ของหาย (Lost)</span>
+              <PackageSearch className="w-4 h-4 shrink-0" />
+              <span className="whitespace-nowrap">ของหาย (Lost)</span>
             </label>
             <label
-              className={`flex items-center justify-center gap-2 p-3.5 rounded-xl border cursor-pointer font-semibold text-sm transition ${
+              className={`flex items-center justify-center gap-2 px-3 py-3 sm:px-4 sm:py-3.5 rounded-xl border cursor-pointer font-semibold text-xs min-[380px]:text-sm transition ${
                 selectedType === "FOUND"
                   ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-xs"
                   : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750"
@@ -112,8 +112,8 @@ export function ItemForm({
                 {...register("type")}
                 className="sr-only"
               />
-              <Gift className="w-4 h-4" />
-              <span>ของที่พบ (Found)</span>
+              <Gift className="w-4 h-4 shrink-0" />
+              <span className="whitespace-nowrap">ของที่พบ (Found)</span>
             </label>
           </div>
         </FormField>
@@ -172,13 +172,13 @@ export function ItemForm({
       </div>
 
       {/* หมวดที่ 2: สถานที่และเวลา */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-5">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
         <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-100">
           <MapPin className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
           <h3 className="font-bold text-base">สถานที่และเวลา</h3>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <FormField
             label="สถานที่ / อาคาร"
             id="location"
@@ -218,7 +218,7 @@ export function ItemForm({
       </div>
 
       {/* หมวดที่ 3: รูปภาพและการติดต่อ */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-5">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
         <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-100">
           <ImageIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           <h3 className="font-bold text-base">รูปภาพและการติดต่อ</h3>
@@ -269,10 +269,10 @@ export function ItemForm({
       </div>
 
       {/* Form Action Buttons */}
-      <div className="flex items-center justify-end gap-3 pt-4">
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3 pt-4">
         <Link
           href="/items"
-          className="px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition"
+          className="px-5 py-2.5 text-center text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition"
         >
           ยกเลิก
         </Link>
@@ -282,6 +282,7 @@ export function ItemForm({
           loading={isSubmitting}
           disabled={isSubmitting}
           leftIcon={<Save className="w-4 h-4" />}
+          className="w-full sm:w-auto"
         >
           {submitLabel}
         </Button>

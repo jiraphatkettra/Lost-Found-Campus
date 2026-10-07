@@ -67,11 +67,11 @@ export function StatusChanger({ itemId, initialStatus }: StatusChangerProps) {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
       <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
         ปรับสถานะ:
       </span>
-      <div className="inline-flex rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 p-1 shadow-2xs">
+      <div className="flex w-full sm:w-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 p-1 shadow-2xs">
         {ITEM_STATUSES.map((s) => {
           const isSelected = optimisticStatus === s.value;
           return (
@@ -79,7 +79,7 @@ export function StatusChanger({ itemId, initialStatus }: StatusChangerProps) {
               key={s.value}
               type="button"
               onClick={() => handleStatusChange(s.value as ItemStatus)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer ${
+              className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 text-2xs min-[360px]:text-xs font-semibold rounded-lg transition cursor-pointer whitespace-nowrap ${
                 isSelected
                   ? "bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"

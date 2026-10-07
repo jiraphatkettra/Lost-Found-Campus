@@ -83,13 +83,13 @@ export function ItemActions({
   // กรณีเป็นเจ้าของประกาศ
   if (isOwner) {
     return (
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pt-5 sm:pt-6 border-t border-slate-100 dark:border-slate-800">
         <StatusChanger itemId={itemId} initialStatus={initialStatus} />
 
-        <div className="flex items-center gap-2.5 self-end sm:self-auto">
+        <div className="flex items-center gap-2 self-stretch sm:self-auto justify-end">
           <Link
             href={`/items/${itemId}/edit`}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 transition"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 transition"
           >
             <Pencil className="w-3.5 h-3.5" />
             <span>แก้ไข</span>
@@ -97,7 +97,7 @@ export function ItemActions({
           <button
             type="button"
             onClick={() => setDeleteModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>ลบประกาศ</span>

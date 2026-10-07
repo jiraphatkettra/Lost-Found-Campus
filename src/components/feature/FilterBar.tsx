@@ -94,21 +94,21 @@ export function FilterBar() {
       {/* Main Filter Bar */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200 dark:border-slate-800 p-3.5 sm:p-4 transition-colors">
         {/* Top Controls: Search and Mobile Filter Trigger */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Search Box */}
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <div className="relative flex-1 min-w-0">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 shrink-0 pointer-events-none" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="ค้นหาชื่อสิ่งของ หรือรายละเอียด..."
-              className="w-full pl-10 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 transition"
+              placeholder="ค้นหาชื่อ หรือรายละเอียด..."
+              className="w-full pl-9 pr-3 sm:pl-10 sm:pr-4 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 transition"
             />
           </div>
 
           {/* Sort Dropdown */}
-          <div className="hidden sm:flex items-center">
+          <div className="hidden sm:flex items-center shrink-0">
             <select
               value={currentSort}
               onChange={(e) => updateFilter("sort", e.target.value)}
@@ -121,16 +121,17 @@ export function FilterBar() {
           </div>
 
           {/* Mobile Filter Button (<lg) */}
-          <div className="lg:hidden">
+          <div className="lg:hidden shrink-0">
             <Button
               variant={activeFiltersCount > 0 ? "primary" : "outline"}
-              size="md"
+              size="sm"
               onClick={() => setIsMobileModalOpen(true)}
-              leftIcon={<SlidersHorizontal className="w-4 h-4" />}
+              leftIcon={<SlidersHorizontal className="w-3.5 h-3.5 shrink-0" />}
+              className="px-2.5 sm:px-3.5 py-2 text-xs sm:text-sm whitespace-nowrap"
             >
-              ตัวกรอง
+              <span>ตัวกรอง</span>
               {activeFiltersCount > 0 && (
-                <span className="ml-1 px-1.5 py-0.2 bg-white text-blue-600 rounded-full text-xs font-bold">
+                <span className="ml-1 px-1.5 py-0.2 bg-white text-blue-600 rounded-full text-2xs font-bold">
                   {activeFiltersCount}
                 </span>
               )}

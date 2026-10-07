@@ -180,21 +180,21 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-12">
       {/* Back button */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <Link
           href="/items"
           className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition group"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span>กลับหน้ารายการสิ่งของ</span>
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform shrink-0" />
+          <span className="truncate">กลับหน้ารายการสิ่งของ</span>
         </Link>
       </div>
 
       {/* Hidden banner for owner/admin */}
       {item.isHidden && (
-        <div className="mb-6 p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 flex items-center gap-3 text-rose-700 dark:text-rose-300">
+        <div className="mb-4 sm:mb-6 p-3.5 sm:p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 flex items-center gap-3 text-rose-700 dark:text-rose-300">
           <ShieldAlert className="w-5 h-5 shrink-0 text-rose-600" />
           <p className="text-xs sm:text-sm font-semibold">
             ประกาศนี้ถูกซ่อนโดยผู้ดูแลระบบ และจะไม่แสดงในรายการค้นหาสาธารณะ
@@ -203,10 +203,10 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
       )}
 
       {/* Main 2-Column Detail Card (Section 7.4: 60% Left Image | 40% Right Info) */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
           {/* Left Column (Images/Placeholder) 60% on desktop (col-span-7) */}
-          <div className="lg:col-span-7 relative min-h-[320px] sm:min-h-[420px] lg:min-h-[520px] bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800">
+          <div className="lg:col-span-7 relative min-h-[240px] sm:min-h-[380px] lg:min-h-[520px] bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800">
             {item.imageUrl ? (
               <Image
                 src={item.imageUrl}
@@ -218,13 +218,13 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
               />
             ) : (
               <div
-                className={`w-full h-full min-h-[320px] sm:min-h-[420px] lg:min-h-[520px] bg-gradient-to-br ${placeholderConfig.gradient} flex flex-col items-center justify-center text-white/90 p-8`}
+                className={`w-full h-full min-h-[240px] sm:min-h-[380px] lg:min-h-[520px] bg-gradient-to-br ${placeholderConfig.gradient} flex flex-col items-center justify-center text-white/90 p-6 sm:p-8`}
               >
                 {getCategoryVectorIcon(item.category)}
-                <span className="text-sm font-bold mt-3 tracking-wide uppercase opacity-90">
+                <span className="text-xs sm:text-sm font-bold mt-3 tracking-wide uppercase opacity-90">
                   {categoryName}
                 </span>
-                <span className="text-xs text-white/70 mt-0.5">
+                <span className="text-2xs sm:text-xs text-white/70 mt-0.5">
                   ไม่มีรูปภาพประกอบ
                 </span>
               </div>
@@ -232,11 +232,11 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
           </div>
 
           {/* Right Column (Info) 40% on desktop (col-span-5) */}
-          <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between space-y-6">
-            <div className="space-y-5">
+          <div className="lg:col-span-5 p-4 sm:p-6 lg:p-8 flex flex-col justify-between space-y-5 sm:space-y-6">
+            <div className="space-y-4 sm:space-y-5">
               {/* Badges + Share */}
               <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   <TypeBadge type={item.type} />
                   <StatusBadge status={item.status} />
                 </div>
@@ -244,32 +244,32 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
               </div>
 
               {/* Title (H1) */}
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
                 {item.title}
               </h1>
 
               {/* Attributes List */}
-              <div className="space-y-2.5 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800 text-xs sm:text-sm">
-                <div className="flex items-center gap-2.5 text-slate-700 dark:text-slate-300">
+              <div className="space-y-2 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800 text-xs sm:text-sm">
+                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                   <Tag className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
-                  <span className="text-slate-500 dark:text-slate-400 w-20">หมวดหมู่:</span>
-                  <span className="font-semibold text-slate-900 dark:text-white">
+                  <span className="text-slate-500 dark:text-slate-400 w-16 sm:w-20 shrink-0">หมวดหมู่:</span>
+                  <span className="font-semibold text-slate-900 dark:text-white truncate">
                     {categoryName}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2.5 text-slate-700 dark:text-slate-300">
+                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                   <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <span className="text-slate-500 dark:text-slate-400 w-20">สถานที่:</span>
-                  <span className="font-semibold text-slate-900 dark:text-white">
+                  <span className="text-slate-500 dark:text-slate-400 w-16 sm:w-20 shrink-0">สถานที่:</span>
+                  <span className="font-semibold text-slate-900 dark:text-white truncate">
                     {locationName}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2.5 text-slate-700 dark:text-slate-300">
+                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                   <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                  <span className="text-slate-500 dark:text-slate-400 w-20">วันที่:</span>
-                  <span className="font-semibold text-slate-900 dark:text-white">
+                  <span className="text-slate-500 dark:text-slate-400 w-16 sm:w-20 shrink-0">วันที่:</span>
+                  <span className="font-semibold text-slate-900 dark:text-white truncate">
                     {formatThaiDate(item.date)}
                   </span>
                 </div>

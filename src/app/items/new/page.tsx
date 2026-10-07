@@ -44,28 +44,28 @@ function NewItemContent() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <div className="max-w-3xl mx-auto px-3 sm:px-6 py-6 sm:py-12">
       {/* Back button */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <Link
           href="/items"
           className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition group"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span>กลับหน้ารายการสิ่งของ</span>
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform shrink-0" />
+          <span className="truncate">กลับหน้ารายการสิ่งของ</span>
         </Link>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 sm:p-10">
-        <div className="mb-8 border-b border-slate-100 dark:border-slate-800 pb-5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 text-xs font-semibold mb-3">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 sm:p-8 md:p-10">
+        <div className="mb-6 sm:mb-8 border-b border-slate-100 dark:border-slate-800 pb-4 sm:pb-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 text-xs font-semibold mb-2.5 sm:mb-3">
             <PlusCircle className="w-3.5 h-3.5" />
             <span>สร้างประกาศใหม่</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {preselectedType === "LOST" ? "แจ้งของหาย (Lost)" : "แจ้งเจอของ (Found)"}
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 sm:mt-1.5 leading-relaxed">
             กรอกรายละเอียดของสิ่งของให้ชัดเจน เพื่อให้ระบบช่วยจับคู่และส่งต่อความช่วยเหลือได้เร็วที่สุด
           </p>
         </div>

@@ -16,8 +16,8 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 sm:p-10">
-      <div className="text-center mb-8">
+    <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-5 sm:p-10">
+      <div className="text-center mb-6 sm:mb-8">
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20 mb-4">
           <SearchCheck className="w-7 h-7" />
         </div>
@@ -87,7 +87,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
+    <div className="min-h-[80vh] flex items-center justify-center px-3 py-8 sm:py-12">
       <Suspense
         fallback={
           <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 text-center text-slate-400 text-sm">
