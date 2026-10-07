@@ -26,46 +26,53 @@ export function Hero() {
 
       {/* Hero Content Container with Floating Orbs */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6 sm:space-y-8">
-        {/* Floating Colorful Balls (Orbs) - Positioned close around text and content */}
-        {/* Ball 1: Rose / Coral (Top-Left near Badge & Title) */}
-        <div className="absolute -top-2 sm:top-0 md:top-2 -left-1 sm:left-2 md:-left-8 lg:-left-14 pointer-events-none select-none z-0">
-          <div className="relative w-8 h-8 sm:w-12 md:w-14 sm:h-12 md:h-14 rounded-full bg-gradient-to-tr from-rose-400 via-pink-400 to-rose-300 shadow-md sm:shadow-lg shadow-rose-500/25 dark:from-rose-500/40 dark:via-pink-500/30 dark:to-rose-400/20 dark:shadow-[0_0_25px_rgba(244,63,94,0.35)] dark:border dark:border-rose-400/30 backdrop-blur-xs animate-float-slow">
-            <div className="absolute top-1.5 left-2 w-2 h-2 sm:w-3.5 sm:h-3.5 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+        {/* Floating Colorful Balls (Orbs) - Scattered dynamically with organic depth & larger on desktop */}
+        {/* Ball 1: Rose / Coral (Top-Left high & wide) */}
+        <div className="absolute -top-6 sm:-top-8 lg:-top-12 left-1 sm:-left-4 lg:-left-24 xl:-left-32 pointer-events-none select-none z-0">
+          <div className="relative w-9 h-9 sm:w-16 sm:h-16 lg:w-28 lg:h-28 rounded-full bg-gradient-to-tr from-rose-400 via-pink-400 to-rose-300 shadow-md sm:shadow-xl shadow-rose-500/25 dark:from-rose-500/40 dark:via-pink-500/30 dark:to-rose-400/20 dark:shadow-[0_0_40px_rgba(244,63,94,0.4)] dark:border dark:border-rose-400/35 backdrop-blur-xs animate-float-slow">
+            <div className="absolute top-2 left-2.5 w-2.5 h-2.5 sm:w-4 sm:h-4 lg:w-7 lg:h-7 rounded-full bg-white/75 dark:bg-white/45 blur-[1px]" />
           </div>
         </div>
 
-        {/* Ball 2: Sky / Blue (Top-Right near Title) */}
-        <div className="absolute top-0 sm:top-2 md:top-3 -right-1 sm:right-2 md:-right-8 lg:-right-14 pointer-events-none select-none z-0">
-          <div className="relative w-9 h-9 sm:w-14 md:w-16 sm:h-14 md:h-16 rounded-full bg-gradient-to-tr from-blue-400 via-sky-400 to-indigo-300 shadow-md sm:shadow-lg shadow-blue-500/25 dark:from-blue-500/40 dark:via-sky-500/30 dark:to-indigo-400/20 dark:shadow-[0_0_30px_rgba(59,130,246,0.35)] dark:border dark:border-blue-400/30 backdrop-blur-xs animate-float-reverse">
-            <div className="absolute top-1.5 left-2 w-2.5 h-2.5 sm:w-4 sm:h-4 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+        {/* Ball 2: Sky / Blue (Upper-Right near headline - Prominent Giant Orb) */}
+        <div className="absolute top-4 sm:top-6 lg:top-8 -right-1 sm:-right-4 lg:-right-20 xl:-right-28 pointer-events-none select-none z-0">
+          <div className="relative w-10 h-10 sm:w-18 sm:h-18 lg:w-32 lg:h-32 rounded-full bg-gradient-to-tr from-blue-400 via-sky-400 to-indigo-300 shadow-md sm:shadow-xl shadow-blue-500/25 dark:from-blue-500/40 dark:via-sky-500/30 dark:to-indigo-400/20 dark:shadow-[0_0_45px_rgba(59,130,246,0.4)] dark:border dark:border-blue-400/35 backdrop-blur-xs animate-float-reverse">
+            <div className="absolute top-2.5 left-3 w-3 h-3 sm:w-5 sm:h-5 lg:w-8 lg:h-8 rounded-full bg-white/75 dark:bg-white/45 blur-[1px]" />
           </div>
         </div>
 
-        {/* Ball 3: Amber / Gold (Middle-Left near Subtitle / Search) */}
-        <div className="absolute top-[36%] sm:top-[38%] left-0 sm:left-2 md:-left-10 lg:-left-16 pointer-events-none select-none z-0 hidden min-[400px]:block">
-          <div className="relative w-6 h-6 sm:w-9 md:w-11 sm:h-9 md:h-11 rounded-full bg-gradient-to-tr from-amber-300 via-yellow-400 to-orange-400 shadow-md shadow-amber-500/25 dark:from-amber-400/40 dark:via-yellow-500/30 dark:to-orange-400/20 dark:shadow-[0_0_20px_rgba(245,158,11,0.35)] dark:border dark:border-amber-400/30 backdrop-blur-xs animate-float-pulse">
-            <div className="absolute top-1 left-1.5 w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+        {/* Ball 3: Amber / Gold (Mid-Upper Left - Tucked closer inward to subtitle) */}
+        <div className="absolute top-[26%] sm:top-[28%] lg:top-[24%] left-3 sm:left-8 lg:left-0 xl:left-4 pointer-events-none select-none z-0 hidden min-[400px]:block">
+          <div className="relative w-7 h-7 sm:w-10 sm:h-10 lg:w-16 lg:h-16 rounded-full bg-gradient-to-tr from-amber-300 via-yellow-400 to-orange-400 shadow-md sm:shadow-lg shadow-amber-500/25 dark:from-amber-400/40 dark:via-yellow-500/30 dark:to-orange-400/20 dark:shadow-[0_0_28px_rgba(245,158,11,0.4)] dark:border dark:border-amber-400/35 backdrop-blur-xs animate-float-pulse">
+            <div className="absolute top-1.5 left-2 w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 rounded-full bg-white/75 dark:bg-white/45 blur-[1px]" />
           </div>
         </div>
 
-        {/* Ball 4: Emerald / Mint (Middle-Right near Search) */}
-        <div className="absolute top-[44%] sm:top-[46%] right-0 sm:right-2 md:-right-10 lg:-right-16 pointer-events-none select-none z-0 hidden min-[400px]:block">
-          <div className="relative w-7 h-7 sm:w-10 md:w-12 sm:h-10 md:h-12 rounded-full bg-gradient-to-tr from-emerald-300 via-teal-400 to-cyan-400 shadow-md shadow-emerald-500/25 dark:from-emerald-400/40 dark:via-teal-500/30 dark:to-cyan-400/20 dark:shadow-[0_0_25px_rgba(16,185,129,0.35)] dark:border dark:border-emerald-400/30 backdrop-blur-xs animate-float-slow">
-            <div className="absolute top-1.5 left-1.5 w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+        {/* Ball 4: Emerald / Mint (Mid-Right - Pushed wide past search bar) */}
+        <div className="absolute top-[48%] sm:top-[50%] lg:top-[46%] -right-2 sm:-right-6 lg:-right-28 xl:-right-36 pointer-events-none select-none z-0 hidden min-[400px]:block">
+          <div className="relative w-8 h-8 sm:w-12 sm:h-12 lg:w-20 lg:h-20 rounded-full bg-gradient-to-tr from-emerald-300 via-teal-400 to-cyan-400 shadow-md sm:shadow-lg shadow-emerald-500/25 dark:from-emerald-400/40 dark:via-teal-500/30 dark:to-cyan-400/20 dark:shadow-[0_0_35px_rgba(16,185,129,0.4)] dark:border dark:border-emerald-400/35 backdrop-blur-xs animate-float-slow">
+            <div className="absolute top-2 left-2 w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 lg:w-5 lg:h-5 rounded-full bg-white/75 dark:bg-white/45 blur-[1px]" />
           </div>
         </div>
 
-        {/* Ball 5: Violet / Purple (Bottom-Left near CTA) */}
-        <div className="absolute -bottom-2 sm:bottom-1 md:bottom-2 left-1 sm:left-4 md:-left-6 lg:-left-12 pointer-events-none select-none z-0">
-          <div className="relative w-6 h-6 sm:w-8 md:w-10 sm:h-8 md:h-10 rounded-full bg-gradient-to-tr from-purple-400 via-violet-400 to-indigo-400 shadow-md shadow-purple-500/25 dark:from-purple-500/40 dark:via-violet-500/30 dark:to-indigo-400/20 dark:shadow-[0_0_20px_rgba(168,85,247,0.35)] dark:border dark:border-purple-400/30 backdrop-blur-xs animate-float-reverse">
-            <div className="absolute top-1 left-1 w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+        {/* Ball 5: Violet / Purple (Mid-Lower Left - Pushed wide to the left) */}
+        <div className="absolute top-[62%] sm:top-[60%] lg:top-[56%] -left-1 sm:-left-6 lg:-left-20 xl:-left-28 pointer-events-none select-none z-0">
+          <div className="relative w-6 h-6 sm:w-10 sm:h-10 lg:w-16 lg:h-16 rounded-full bg-gradient-to-tr from-purple-400 via-violet-400 to-indigo-400 shadow-md sm:shadow-lg shadow-purple-500/25 dark:from-purple-500/40 dark:via-violet-500/30 dark:to-indigo-400/20 dark:shadow-[0_0_30px_rgba(168,85,247,0.4)] dark:border dark:border-purple-400/35 backdrop-blur-xs animate-float-reverse">
+            <div className="absolute top-1.5 left-1.5 w-2 h-2 sm:w-2.5 sm:h-2.5 lg:w-4 lg:h-4 rounded-full bg-white/75 dark:bg-white/45 blur-[1px]" />
           </div>
         </div>
 
-        {/* Ball 6: Fuchsia / Pink (Bottom-Right near CTA) */}
-        <div className="absolute -bottom-1 sm:bottom-2 md:bottom-3 right-1 sm:right-4 md:-right-6 lg:-right-12 pointer-events-none select-none z-0">
-          <div className="relative w-7 h-7 sm:w-9 md:w-11 sm:h-9 md:h-11 rounded-full bg-gradient-to-tr from-fuchsia-400 via-pink-400 to-rose-400 shadow-md shadow-fuchsia-500/25 dark:from-fuchsia-500/40 dark:via-pink-500/30 dark:to-rose-400/20 dark:shadow-[0_0_22px_rgba(217,70,239,0.35)] dark:border dark:border-fuchsia-400/30 backdrop-blur-xs animate-float-pulse">
-            <div className="absolute top-1 left-1.5 w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+        {/* Ball 6: Fuchsia / Pink (Bottom-Right - Tucked closer to CTA buttons) */}
+        <div className="absolute -bottom-3 sm:-bottom-1 lg:-bottom-4 right-3 sm:right-8 lg:right-4 xl:right-10 pointer-events-none select-none z-0">
+          <div className="relative w-7 h-7 sm:w-12 sm:h-12 lg:w-24 lg:h-24 rounded-full bg-gradient-to-tr from-fuchsia-400 via-pink-400 to-rose-400 shadow-md sm:shadow-xl shadow-fuchsia-500/25 dark:from-fuchsia-500/40 dark:via-pink-500/30 dark:to-rose-400/20 dark:shadow-[0_0_38px_rgba(217,70,239,0.4)] dark:border dark:border-fuchsia-400/35 backdrop-blur-xs animate-float-pulse">
+            <div className="absolute top-2 left-2 w-2 h-2 sm:w-3 sm:h-3 lg:w-6 lg:h-6 rounded-full bg-white/75 dark:bg-white/45 blur-[1px]" />
+          </div>
+        </div>
+
+        {/* Ball 7: Cyan / Sky (Bottom-Left - Delicate accent orb underneath CTA) */}
+        <div className="absolute -bottom-5 sm:-bottom-3 lg:-bottom-6 left-8 sm:left-16 lg:left-16 xl:left-24 pointer-events-none select-none z-0 hidden sm:block">
+          <div className="relative w-5 h-5 sm:w-7 sm:h-7 lg:w-11 lg:h-11 rounded-full bg-gradient-to-tr from-cyan-300 via-sky-400 to-blue-400 shadow-md shadow-cyan-500/25 dark:from-cyan-400/40 dark:via-sky-500/30 dark:to-blue-400/20 dark:shadow-[0_0_22px_rgba(6,182,212,0.4)] dark:border dark:border-cyan-400/35 backdrop-blur-xs animate-float-slow">
+            <div className="absolute top-1 left-1 w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-3 lg:h-3 rounded-full bg-white/75 dark:bg-white/45 blur-[1px]" />
           </div>
         </div>
 
