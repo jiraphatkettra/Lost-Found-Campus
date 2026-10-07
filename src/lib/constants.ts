@@ -1,0 +1,165 @@
+// ค่าคงที่และป้ายภาษาไทยทั้งหมดของระบบ Lost & Found Campus v2 (ห้ามเขียนข้อความซ้ำกระจายในหลายไฟล์)
+
+export const CATEGORIES = [
+  {
+    value: "BOOK",
+    label: "หนังสือ / สมุด",
+    iconName: "BookOpen",
+    gradient: "from-amber-500/10 to-amber-500/20 text-amber-600 dark:text-amber-400",
+  },
+  {
+    value: "ELECTRONICS",
+    label: "อุปกรณ์อิเล็กทรอนิกส์",
+    iconName: "Smartphone",
+    gradient: "from-blue-500/10 to-blue-500/20 text-blue-600 dark:text-blue-400",
+  },
+  {
+    value: "CARD",
+    label: "บัตร / กระเป๋าสตางค์",
+    iconName: "CreditCard",
+    gradient: "from-violet-500/10 to-violet-500/20 text-violet-600 dark:text-violet-400",
+  },
+  {
+    value: "BAG",
+    label: "กระเป๋า / เป้",
+    iconName: "Backpack",
+    gradient: "from-emerald-500/10 to-emerald-500/20 text-emerald-600 dark:text-emerald-400",
+  },
+  {
+    value: "CLOTHES",
+    label: "เสื้อผ้า / เครื่องแต่งกาย",
+    iconName: "Shirt",
+    gradient: "from-pink-500/10 to-pink-500/20 text-pink-600 dark:text-pink-400",
+  },
+  {
+    value: "KEYS",
+    label: "กุญแจ / คีย์การ์ด",
+    iconName: "KeyRound",
+    gradient: "from-orange-500/10 to-orange-500/20 text-orange-600 dark:text-orange-400",
+  },
+  {
+    value: "OTHER",
+    label: "อื่น ๆ",
+    iconName: "Package",
+    gradient: "from-slate-500/10 to-slate-500/20 text-slate-600 dark:text-slate-400",
+  },
+] as const;
+
+export const LOCATIONS = [
+  { value: "LIBRARY", label: "หอสมุดกลาง" },
+  { value: "CANTEEN", label: "โรงอาหาร" },
+  { value: "BUILDING_A", label: "อาคารเรียน A" },
+  { value: "BUILDING_B", label: "อาคารเรียน B" },
+  { value: "SPORTS_CENTER", label: "ศูนย์กีฬา / ยิม" },
+  { value: "PARKING", label: "ลานจอดรถ" },
+  { value: "OTHER", label: "สถานที่อื่น ๆ" },
+] as const;
+
+export const ITEM_TYPES = [
+  {
+    value: "LOST",
+    label: "ของหาย",
+    badgeClass: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
+  },
+  {
+    value: "FOUND",
+    label: "ของที่เก็บได้",
+    badgeClass: "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300",
+  },
+] as const;
+
+export const ITEM_STATUSES = [
+  {
+    value: "SEARCHING",
+    label: "กำลังตามหา",
+    badgeClass: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
+  },
+  {
+    value: "FOUND",
+    label: "พบของแล้ว",
+    badgeClass: "bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300",
+  },
+  {
+    value: "RETURNED",
+    label: "ส่งคืนเรียบร้อย",
+    badgeClass: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+  },
+] as const;
+
+export const CLAIM_STATUSES = [
+  {
+    value: "PENDING",
+    label: "รอการตรวจสอบ",
+    badgeClass: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
+  },
+  {
+    value: "ACCEPTED",
+    label: "ตอบรับแล้ว",
+    badgeClass: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+  },
+  {
+    value: "REJECTED",
+    label: "ปฏิเสธ",
+    badgeClass: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
+  },
+  {
+    value: "CANCELLED",
+    label: "ยกเลิกแล้ว",
+    badgeClass: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+  },
+] as const;
+
+export const REPORT_REASONS = [
+  { value: "SPAM", label: "ข้อความสแปม / โฆษณา" },
+  { value: "INAPPROPRIATE", label: "เนื้อหาไม่เหมาะสม / หยาบคาย" },
+  { value: "FAKE", label: "ข้อมูลเท็จ / หลอกลวง" },
+  { value: "OTHER", label: "เหตุผลอื่น ๆ" },
+] as const;
+
+export type CategoryValue = (typeof CATEGORIES)[number]["value"];
+export type LocationValue = (typeof LOCATIONS)[number]["value"];
+export type ItemTypeValue = (typeof ITEM_TYPES)[number]["value"];
+export type ItemStatusValue = (typeof ITEM_STATUSES)[number]["value"];
+
+// Helper maps
+export const CATEGORY_LABEL_MAP: Record<string, string> = Object.fromEntries(
+  CATEGORIES.map((c) => [c.value, c.label])
+);
+
+export const LOCATION_LABEL_MAP: Record<string, string> = Object.fromEntries(
+  LOCATIONS.map((l) => [l.value, l.label])
+);
+
+export const ITEM_TYPE_LABEL_MAP: Record<string, string> = Object.fromEntries(
+  ITEM_TYPES.map((t) => [t.value, t.label])
+);
+
+export const ITEM_STATUS_LABEL_MAP: Record<string, string> = Object.fromEntries(
+  ITEM_STATUSES.map((s) => [s.value, s.label])
+);
+
+export const ITEM_STATUS_CLASS_MAP: Record<string, string> = Object.fromEntries(
+  ITEM_STATUSES.map((s) => [s.value, s.badgeClass])
+);
+
+export const ITEM_TYPE_CLASS_MAP: Record<string, string> = Object.fromEntries(
+  ITEM_TYPES.map((t) => [t.value, t.badgeClass])
+);
+
+export const CLAIM_STATUS_LABEL_MAP: Record<string, string> = Object.fromEntries(
+  CLAIM_STATUSES.map((c) => [c.value, c.label])
+);
+
+export const CLAIM_STATUS_CLASS_MAP: Record<string, string> = Object.fromEntries(
+  CLAIM_STATUSES.map((c) => [c.value, c.badgeClass])
+);
+
+export const CATEGORY_PLACEHOLDER_MAP: Record<
+  string,
+  { label: string; iconName: string; gradient: string }
+> = Object.fromEntries(
+  CATEGORIES.map((c) => [
+    c.value,
+    { label: c.label, iconName: c.iconName, gradient: c.gradient },
+  ])
+);

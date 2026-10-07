@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ItemType {
+  LOST
+  FOUND
+}
+
+enum Category {
+  BOOK
+  ELECTRONICS
+  CARD
+  BAG
+  CLOTHES
+  KEYS
+  OTHER
+}
+
+enum ItemStatus {
+  SEARCHING
+  FOUND
+  RETURNED
+}
+
+enum ClaimStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+enum NotificationType {
+  CLAIM_RECEIVED
+  CLAIM_ACCEPTED
+  CLAIM_REJECTED
+  MATCH_FOUND
+  ITEM_HIDDEN
+}
+
+enum ReportReason {
+  SPAM
+  INAPPROPRIATE
+  FAKE
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  RESOLVED
+  DISMISSED
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String?
+  email         String         @unique
+  image         String?
+  role          Role           @default(USER)
+  createdAt     DateTime       @default(now())
+  items         Item[]
+  claims        Claim[]
+  notifications Notification[]
+  reports       Report[]
+}
+
+model Item {
+  id          String      @id @default(cuid())
+  type        ItemType
+  title       String
+  category    Category
+  location    String
+  date        DateTime
+  description String
+  contact     String
+  imageUrl    String?
+  status      ItemStatus  @default(SEARCHING)
+  isHidden    Boolean     @default(false)
+  ownerId     String
+  owner       User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  claims      Claim[]
+  reports     Report[]
+
+  @@index([type])
+  @@index([status])
+  @@index([ownerId])
+  @@index([isHidden])
+}
+
+model Claim {
+  id              String      @id @default(cuid())
+  itemId          String
+  item            Item        @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  claimantId      String
+  claimant        User        @relation(fields: [claimantId], references: [id], onDelete: Cascade)
+  message         String
+  claimantContact String
+  status          ClaimStatus @default(PENDING)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([itemId])
+  @@index([claimantId])
+  @@index([status])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  body      String?
+  link      String
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  @@index([userId, readAt])
+  @@index([createdAt])
+}
+
+model Report {
+  id         String       @id @default(cuid())
+  itemId     String
+  item       Item         @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  reporterId String
+  reporter   User         @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reason     ReportReason
+  detail     String?
+  status     ReportStatus @default(OPEN)
+  createdAt  DateTime     @default(now())
+
+  @@unique([itemId, reporterId])
+  @@index([status])
+}
