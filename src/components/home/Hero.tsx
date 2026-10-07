@@ -24,50 +24,51 @@ export function Hero() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 sm:w-96 h-80 sm:h-96 bg-blue-400/10 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-1/3 left-1/4 w-60 sm:w-72 h-60 sm:h-72 bg-indigo-400/10 dark:bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Floating Colorful Balls (Orbs) - Light: Vibrant / Dark: Glowing Neon-Glass */}
-      {/* Ball 1: Rose / Coral (Top-Left) */}
-      <div className="absolute top-6 sm:top-12 left-3 sm:left-12 pointer-events-none select-none z-0">
-        <div className="relative w-9 h-9 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-rose-400 via-pink-400 to-rose-300 shadow-md sm:shadow-lg shadow-rose-500/25 dark:from-rose-500/40 dark:via-pink-500/30 dark:to-rose-400/20 dark:shadow-[0_0_25px_rgba(244,63,94,0.35)] dark:border dark:border-rose-400/30 backdrop-blur-xs animate-float-slow">
-          <div className="absolute top-1.5 left-2 w-2.5 h-2.5 sm:w-4 sm:h-4 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
-        </div>
-      </div>
-
-      {/* Ball 2: Sky / Blue (Top-Right) */}
-      <div className="absolute top-8 sm:top-14 right-3 sm:right-14 pointer-events-none select-none z-0">
-        <div className="relative w-10 h-10 sm:w-20 sm:h-20 rounded-full bg-gradient-to-tr from-blue-400 via-sky-400 to-indigo-300 shadow-md sm:shadow-lg shadow-blue-500/25 dark:from-blue-500/40 dark:via-sky-500/30 dark:to-indigo-400/20 dark:shadow-[0_0_30px_rgba(59,130,246,0.35)] dark:border dark:border-blue-400/30 backdrop-blur-xs animate-float-reverse">
-          <div className="absolute top-2 left-2.5 w-3 h-3 sm:w-5 sm:h-5 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
-        </div>
-      </div>
-
-      {/* Ball 3: Amber / Gold (Middle-Left) */}
-      <div className="absolute top-1/2 left-2 sm:left-16 -translate-y-1/2 pointer-events-none select-none z-0 hidden min-[400px]:block">
-        <div className="relative w-7 h-7 sm:w-12 sm:h-12 rounded-full bg-gradient-to-tr from-amber-300 via-yellow-400 to-orange-400 shadow-md shadow-amber-500/25 dark:from-amber-400/40 dark:via-yellow-500/30 dark:to-orange-400/20 dark:shadow-[0_0_20px_rgba(245,158,11,0.35)] dark:border dark:border-amber-400/30 backdrop-blur-xs animate-float-pulse">
-          <div className="absolute top-1 left-1.5 w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
-        </div>
-      </div>
-
-      {/* Ball 4: Emerald / Mint (Middle-Right) */}
-      <div className="absolute top-1/2 right-2 sm:right-16 -translate-y-1/3 pointer-events-none select-none z-0 hidden min-[400px]:block">
-        <div className="relative w-8 h-8 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-emerald-300 via-teal-400 to-cyan-400 shadow-md shadow-emerald-500/25 dark:from-emerald-400/40 dark:via-teal-500/30 dark:to-cyan-400/20 dark:shadow-[0_0_25px_rgba(16,185,129,0.35)] dark:border dark:border-emerald-400/30 backdrop-blur-xs animate-float-slow">
-          <div className="absolute top-1.5 left-2 w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
-        </div>
-      </div>
-
-      {/* Ball 5: Violet / Purple (Bottom-Left) */}
-      <div className="absolute bottom-4 sm:bottom-10 left-8 sm:left-28 pointer-events-none select-none z-0">
-        <div className="relative w-6 h-6 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-purple-400 via-violet-400 to-indigo-400 shadow-md shadow-purple-500/25 dark:from-purple-500/40 dark:via-violet-500/30 dark:to-indigo-400/20 dark:shadow-[0_0_20px_rgba(168,85,247,0.35)] dark:border dark:border-purple-400/30 backdrop-blur-xs animate-float-reverse">
-          <div className="absolute top-1 left-1 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
-        </div>
-      </div>
-
-      {/* Ball 6: Fuchsia / Pink (Bottom-Right) */}
-      <div className="absolute bottom-5 sm:bottom-12 right-6 sm:right-28 pointer-events-none select-none z-0">
-        <div className="relative w-7 h-7 sm:w-12 sm:h-12 rounded-full bg-gradient-to-tr from-fuchsia-400 via-pink-400 to-rose-400 shadow-md shadow-fuchsia-500/25 dark:from-fuchsia-500/40 dark:via-pink-500/30 dark:to-rose-400/20 dark:shadow-[0_0_22px_rgba(217,70,239,0.35)] dark:border dark:border-fuchsia-400/30 backdrop-blur-xs animate-float-pulse">
-          <div className="absolute top-1 left-1.5 w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
-        </div>
-      </div>
-
+      {/* Hero Content Container with Floating Orbs */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6 sm:space-y-8">
+        {/* Floating Colorful Balls (Orbs) - Positioned close around text and content */}
+        {/* Ball 1: Rose / Coral (Top-Left near Badge & Title) */}
+        <div className="absolute -top-2 sm:top-0 md:top-2 -left-1 sm:left-2 md:-left-8 lg:-left-14 pointer-events-none select-none z-0">
+          <div className="relative w-8 h-8 sm:w-12 md:w-14 sm:h-12 md:h-14 rounded-full bg-gradient-to-tr from-rose-400 via-pink-400 to-rose-300 shadow-md sm:shadow-lg shadow-rose-500/25 dark:from-rose-500/40 dark:via-pink-500/30 dark:to-rose-400/20 dark:shadow-[0_0_25px_rgba(244,63,94,0.35)] dark:border dark:border-rose-400/30 backdrop-blur-xs animate-float-slow">
+            <div className="absolute top-1.5 left-2 w-2 h-2 sm:w-3.5 sm:h-3.5 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+          </div>
+        </div>
+
+        {/* Ball 2: Sky / Blue (Top-Right near Title) */}
+        <div className="absolute top-0 sm:top-2 md:top-3 -right-1 sm:right-2 md:-right-8 lg:-right-14 pointer-events-none select-none z-0">
+          <div className="relative w-9 h-9 sm:w-14 md:w-16 sm:h-14 md:h-16 rounded-full bg-gradient-to-tr from-blue-400 via-sky-400 to-indigo-300 shadow-md sm:shadow-lg shadow-blue-500/25 dark:from-blue-500/40 dark:via-sky-500/30 dark:to-indigo-400/20 dark:shadow-[0_0_30px_rgba(59,130,246,0.35)] dark:border dark:border-blue-400/30 backdrop-blur-xs animate-float-reverse">
+            <div className="absolute top-1.5 left-2 w-2.5 h-2.5 sm:w-4 sm:h-4 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+          </div>
+        </div>
+
+        {/* Ball 3: Amber / Gold (Middle-Left near Subtitle / Search) */}
+        <div className="absolute top-[36%] sm:top-[38%] left-0 sm:left-2 md:-left-10 lg:-left-16 pointer-events-none select-none z-0 hidden min-[400px]:block">
+          <div className="relative w-6 h-6 sm:w-9 md:w-11 sm:h-9 md:h-11 rounded-full bg-gradient-to-tr from-amber-300 via-yellow-400 to-orange-400 shadow-md shadow-amber-500/25 dark:from-amber-400/40 dark:via-yellow-500/30 dark:to-orange-400/20 dark:shadow-[0_0_20px_rgba(245,158,11,0.35)] dark:border dark:border-amber-400/30 backdrop-blur-xs animate-float-pulse">
+            <div className="absolute top-1 left-1.5 w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+          </div>
+        </div>
+
+        {/* Ball 4: Emerald / Mint (Middle-Right near Search) */}
+        <div className="absolute top-[44%] sm:top-[46%] right-0 sm:right-2 md:-right-10 lg:-right-16 pointer-events-none select-none z-0 hidden min-[400px]:block">
+          <div className="relative w-7 h-7 sm:w-10 md:w-12 sm:h-10 md:h-12 rounded-full bg-gradient-to-tr from-emerald-300 via-teal-400 to-cyan-400 shadow-md shadow-emerald-500/25 dark:from-emerald-400/40 dark:via-teal-500/30 dark:to-cyan-400/20 dark:shadow-[0_0_25px_rgba(16,185,129,0.35)] dark:border dark:border-emerald-400/30 backdrop-blur-xs animate-float-slow">
+            <div className="absolute top-1.5 left-1.5 w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+          </div>
+        </div>
+
+        {/* Ball 5: Violet / Purple (Bottom-Left near CTA) */}
+        <div className="absolute -bottom-2 sm:bottom-1 md:bottom-2 left-1 sm:left-4 md:-left-6 lg:-left-12 pointer-events-none select-none z-0">
+          <div className="relative w-6 h-6 sm:w-8 md:w-10 sm:h-8 md:h-10 rounded-full bg-gradient-to-tr from-purple-400 via-violet-400 to-indigo-400 shadow-md shadow-purple-500/25 dark:from-purple-500/40 dark:via-violet-500/30 dark:to-indigo-400/20 dark:shadow-[0_0_20px_rgba(168,85,247,0.35)] dark:border dark:border-purple-400/30 backdrop-blur-xs animate-float-reverse">
+            <div className="absolute top-1 left-1 w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+          </div>
+        </div>
+
+        {/* Ball 6: Fuchsia / Pink (Bottom-Right near CTA) */}
+        <div className="absolute -bottom-1 sm:bottom-2 md:bottom-3 right-1 sm:right-4 md:-right-6 lg:-right-12 pointer-events-none select-none z-0">
+          <div className="relative w-7 h-7 sm:w-9 md:w-11 sm:h-9 md:h-11 rounded-full bg-gradient-to-tr from-fuchsia-400 via-pink-400 to-rose-400 shadow-md shadow-fuchsia-500/25 dark:from-fuchsia-500/40 dark:via-pink-500/30 dark:to-rose-400/20 dark:shadow-[0_0_22px_rgba(217,70,239,0.35)] dark:border dark:border-fuchsia-400/30 backdrop-blur-xs animate-float-pulse">
+            <div className="absolute top-1 left-1.5 w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full bg-white/70 dark:bg-white/40 blur-[1px]" />
+          </div>
+        </div>
+
         {/* Badge */}
         <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-blue-100/80 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 text-[11px] sm:text-xs font-semibold ring-1 ring-blue-500/20 max-w-[260px] min-[360px]:max-w-none">
           <Sparkles className="w-3.5 h-3.5 shrink-0" />
