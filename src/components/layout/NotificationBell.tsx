@@ -18,30 +18,35 @@ export function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [recentNotifications, setRecentNotifications] = useState<NotificationItem[]>([]);
 
-  const fetchNotifications = async () => {
-    try {
-      const res = await fetch("/api/notifications");
-      if (res.ok) {
-        const data = await res.json();
-        setUnreadCount(data.unreadCount || 0);
-        setRecentNotifications(data.notifications?.slice(0, 5) || []);
-      }
-    } catch {
-      // ignore network errors
-    }
-  };
-
   useEffect(() => {
-    fetchNotifications();
+    let ignore = false;
+
+    const load = async () => {
+      try {
+        const res = await fetch("/api/notifications");
+        if (res.ok && !ignore) {
+          const data = await res.json();
+          setUnreadCount(data.unreadCount || 0);
+          setRecentNotifications(data.notifications?.slice(0, 5) || []);
+        }
+      } catch {
+        // ignore network errors
+      }
+    };
+
+    load();
 
     // Poll every 60 seconds when document is visible (Section 4.2)
     const interval = setInterval(() => {
       if (document.visibilityState === "visible") {
-        fetchNotifications();
+        load();
       }
     }, 60000);
 
-    return () => clearInterval(interval);
+    return () => {
+      ignore = true;
+      clearInterval(interval);
+    };
   }, []);
 
   const markAllAsRead = async () => {
@@ -66,7 +71,7 @@ export function NotificationBell() {
       className="w-80 sm:w-96"
       trigger={
         <button
-          className="relative p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+          className="relative min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           aria-label="การแจ้งเตือน"
         >
           <Bell className="w-5 h-5" />

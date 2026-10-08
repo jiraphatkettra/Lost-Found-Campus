@@ -37,10 +37,10 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold select-none shadow-2xs ${colorClass}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold select-none shadow-2xs whitespace-nowrap shrink-0 ${colorClass}`}
     >
       {renderStatusVector()}
-      <span>{label}</span>
+      <span className="whitespace-nowrap">{label}</span>
     </span>
   );
 }
@@ -63,10 +63,10 @@ export function TypeBadge({ type }: { type: string }) {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold select-none tracking-wide shadow-2xs ${colorClass}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold select-none shadow-2xs whitespace-nowrap shrink-0 ${colorClass}`}
     >
       {renderIcon()}
-      <span>{label}</span>
+      <span className="whitespace-nowrap">{label}</span>
     </span>
   );
 }

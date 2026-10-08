@@ -95,38 +95,38 @@ export default async function MyItemsPage({ searchParams }: MyItemsPageProps) {
   ]);
 
   return (
-    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10 lg:py-12">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.3] [text-wrap:balance]">
             จัดการรายการของฉัน
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 [text-wrap:balance]">
             ตรวจสอบประกาศ คำขอที่ได้รับ และสถานะคำขอที่คุณส่งไป
           </p>
         </div>
 
         <Link
           href="/items/new"
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition active:scale-95 w-full sm:w-auto shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-5 h-12 min-h-[48px] rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition active:scale-95 w-full sm:w-auto shrink-0"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 shrink-0" />
           <span>สร้างประกาศใหม่</span>
         </Link>
       </div>
 
       {/* 3 Tabs Header (Section 7.5) */}
-      <div className="flex border-b border-slate-200 dark:border-slate-800 gap-1 sm:gap-6 mb-6 sm:mb-8 overflow-x-auto pb-1 scrollbar-none">
+      <div className="flex border-b border-slate-200 dark:border-slate-800 gap-2 sm:gap-6 mb-6 sm:mb-8 overflow-x-auto pb-1 scrollbar-none no-scrollbar">
         <Link
           href="/my-items?tab=items"
-          className={`flex items-center gap-2 pb-3 px-1 text-xs sm:text-sm font-semibold border-b-2 whitespace-nowrap transition ${
+          className={`min-h-[44px] flex items-center gap-2 pb-3 px-2 text-xs sm:text-sm font-semibold border-b-2 whitespace-nowrap transition shrink-0 ${
             tab === "items"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
-          <Package className="w-4 h-4" />
+          <Package className="w-4 h-4 shrink-0" />
           <span>ประกาศของฉัน</span>
           <Badge variant={tab === "items" ? "primary" : "neutral"} size="sm">
             {items.length}
@@ -135,13 +135,13 @@ export default async function MyItemsPage({ searchParams }: MyItemsPageProps) {
 
         <Link
           href="/my-items?tab=received"
-          className={`flex items-center gap-2 pb-3 px-1 text-xs sm:text-sm font-semibold border-b-2 whitespace-nowrap transition ${
+          className={`min-h-[44px] flex items-center gap-2 pb-3 px-2 text-xs sm:text-sm font-semibold border-b-2 whitespace-nowrap transition shrink-0 ${
             tab === "received"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
-          <Inbox className="w-4 h-4" />
+          <Inbox className="w-4 h-4 shrink-0" />
           <span>คำขอที่ได้รับ</span>
           <Badge variant={tab === "received" ? "primary" : "neutral"} size="sm">
             {receivedClaims.length}
@@ -150,13 +150,13 @@ export default async function MyItemsPage({ searchParams }: MyItemsPageProps) {
 
         <Link
           href="/my-items?tab=sent"
-          className={`flex items-center gap-2 pb-3 px-1 text-xs sm:text-sm font-semibold border-b-2 whitespace-nowrap transition ${
+          className={`min-h-[44px] flex items-center gap-2 pb-3 px-2 text-xs sm:text-sm font-semibold border-b-2 whitespace-nowrap transition shrink-0 ${
             tab === "sent"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
-          <Send className="w-4 h-4" />
+          <Send className="w-4 h-4 shrink-0" />
           <span>คำขอที่ส่งไป</span>
           <Badge variant={tab === "sent" ? "primary" : "neutral"} size="sm">
             {sentClaims.length}
@@ -170,7 +170,7 @@ export default async function MyItemsPage({ searchParams }: MyItemsPageProps) {
           {items.length === 0 ? (
             <EmptyState
               title="คุณยังไม่มีประกาศในระบบ"
-              description="หากคุณทำของสำคัญหาย หรือเก็บสิ่งของได้ในรั้วมหาวิทยาลัย สามารถเริ่มแจ้งประกาศได้ทันที"
+              description="หากคุณทำของสำคัญหาย หรือเก็บสิ่งของได้ในรั้ว ม.แม่โจ้ สามารถเริ่มแจ้งประกาศได้ทันที"
               action={{
                 label: "สร้างประกาศแรกของคุณ",
                 href: "/items/new",

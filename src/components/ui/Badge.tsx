@@ -40,10 +40,10 @@ export function Badge({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full font-semibold select-none ${sizeClass} ${variantStyles[variant]} ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full font-semibold select-none whitespace-nowrap shrink-0 ${sizeClass} ${variantStyles[variant]} ${className}`}
     >
-      {dot && <span className="w-1.5 h-1.5 rounded-full bg-current" />}
-      {children}
+      {dot && <span className="w-1.5 h-1.5 rounded-full bg-current shrink-0" />}
+      <span className="whitespace-nowrap">{children}</span>
     </span>
   );
 }

@@ -132,7 +132,7 @@ export function NotificationList({
     if (list.length === 0) return null;
     return (
       <div className="space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-1">
+        <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 px-1">
           {title} ({list.length})
         </h3>
         <div className="space-y-2">

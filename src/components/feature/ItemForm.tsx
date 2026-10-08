@@ -14,14 +14,13 @@ import {
   Gift,
   FileText,
   MapPin,
-  Calendar,
   Lock,
   Save,
   ImageIcon,
 } from "lucide-react";
 
 export interface ItemFormProps {
-  defaultValues?: Partial<CreateItemInput>;
+  defaultValues?: Partial<CreateItemInput> & { customLocation?: string };
   onSubmit: (data: CreateItemInput) => Promise<void>;
   submitLabel?: string;
   isSubmitting?: boolean;
@@ -37,6 +36,13 @@ export function ItemForm({
     ? new Date(defaultValues.date).toISOString().split("T")[0]
     : new Date().toISOString().split("T")[0];
 
+  const rawLocation = defaultValues?.location || "LIBRARY";
+  const isOtherLoc = rawLocation.startsWith("OTHER:") || rawLocation === "OTHER";
+  const initialLocation = isOtherLoc ? "OTHER" : rawLocation;
+  const initialCustomLocation = rawLocation.startsWith("OTHER:")
+    ? rawLocation.slice(6).trim()
+    : defaultValues?.customLocation || "";
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const {
     register,
@@ -51,7 +57,8 @@ export function ItemForm({
       type: defaultValues?.type || "LOST",
       title: defaultValues?.title || "",
       category: defaultValues?.category || "BOOK",
-      location: defaultValues?.location || "LIBRARY",
+      location: initialLocation,
+      customLocation: initialCustomLocation,
       date: formattedDefaultDate,
       description: defaultValues?.description || "",
       contact: defaultValues?.contact || "",
@@ -63,17 +70,21 @@ export function ItemForm({
   const selectedType = watch("type");
 
   const handleValidSubmit = async (data: any) => {
-    await onSubmit(data as CreateItemInput);
+    const finalLocation =
+      data.location === "OTHER" && data.customLocation?.trim()
+        ? `OTHER: ${data.customLocation.trim()}`
+        : data.location;
+    await onSubmit({ ...data, location: finalLocation } as CreateItemInput);
   };
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
   return (
-    <form onSubmit={handleSubmit(handleValidSubmit)} className="space-y-6 sm:space-y-8">
+    <form onSubmit={handleSubmit(handleValidSubmit)} className="space-y-4 sm:space-y-5">
       {/* หมวดที่ 1: ข้อมูลสิ่งของ */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-100">
-          <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-          <h3 className="font-bold text-base">ข้อมูลสิ่งของ</h3>
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-3.5 sm:p-5 shadow-2xs space-y-3.5 sm:space-y-4">
+        <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-100">
+          <FileText className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-blue-600 dark:text-blue-400" />
+          <h3 className="font-bold text-sm sm:text-base">ข้อมูลสิ่งของ</h3>
         </div>
 
         {/* Type Selection: ของหาย / ของเจอ */}
@@ -82,9 +93,9 @@ export function ItemForm({
           error={errors.type?.message as string | undefined}
           required
         >
-          <div className="grid grid-cols-1 min-[380px]:grid-cols-2 gap-2 sm:gap-3 mt-1">
+          <div className="grid grid-cols-2 gap-2 sm:gap-2.5 mt-1">
             <label
-              className={`flex items-center justify-center gap-2 px-3 py-3 sm:px-4 sm:py-3.5 rounded-xl border cursor-pointer font-semibold text-xs min-[380px]:text-sm transition ${
+              className={`min-h-[42px] sm:min-h-[44px] flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border cursor-pointer font-semibold text-xs sm:text-sm transition ${
                 selectedType === "LOST"
                   ? "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 shadow-xs"
                   : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750"
@@ -97,10 +108,10 @@ export function ItemForm({
                 className="sr-only"
               />
               <PackageSearch className="w-4 h-4 shrink-0" />
-              <span className="whitespace-nowrap">ของหาย (Lost)</span>
+              <span className="truncate">ของหาย (Lost)</span>
             </label>
             <label
-              className={`flex items-center justify-center gap-2 px-3 py-3 sm:px-4 sm:py-3.5 rounded-xl border cursor-pointer font-semibold text-xs min-[380px]:text-sm transition ${
+              className={`min-h-[42px] sm:min-h-[44px] flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border cursor-pointer font-semibold text-xs sm:text-sm transition ${
                 selectedType === "FOUND"
                   ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-xs"
                   : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750"
@@ -113,7 +124,7 @@ export function ItemForm({
                 className="sr-only"
               />
               <Gift className="w-4 h-4 shrink-0" />
-              <span className="whitespace-nowrap">ของที่พบ (Found)</span>
+              <span className="truncate">ของที่พบ (Found)</span>
             </label>
           </div>
         </FormField>
@@ -128,9 +139,9 @@ export function ItemForm({
           <input
             id="title"
             type="text"
-            placeholder="เช่น พวงกุญแจหมีสีน้ำตาล, กระเป๋าสตางค์หนังสีดำ, หูฟัง AirPods"
+            placeholder="เช่น พวงกุญแจหมี, กระเป๋าสตางค์สีดำ, AirPods"
             {...register("title")}
-            className="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition"
+            className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition"
           />
         </FormField>
 
@@ -144,7 +155,7 @@ export function ItemForm({
           <select
             id="category"
             {...register("category")}
-            className="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition cursor-pointer"
+            className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition cursor-pointer"
           >
             {CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>
@@ -163,19 +174,19 @@ export function ItemForm({
         >
           <textarea
             id="description"
-            rows={4}
+            rows={3}
             placeholder="ระบุจุดสังเกต สี ตำหนิ หรือลักษณะเฉพาะอย่างละเอียด (อย่างน้อย 10 ตัวอักษร)"
             {...register("description")}
-            className="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition resize-none"
+            className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition resize-none"
           />
         </FormField>
       </div>
 
       {/* หมวดที่ 2: สถานที่และเวลา */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-100">
-          <MapPin className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-          <h3 className="font-bold text-base">สถานที่และเวลา</h3>
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-3.5 sm:p-5 shadow-2xs space-y-3.5 sm:space-y-4">
+        <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-100">
+          <MapPin className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-600 dark:text-emerald-400" />
+          <h3 className="font-bold text-sm sm:text-base">สถานที่และเวลา</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
@@ -188,7 +199,7 @@ export function ItemForm({
             <select
               id="location"
               {...register("location")}
-              className="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition cursor-pointer"
+              className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition cursor-pointer"
             >
               {LOCATIONS.map((l) => (
                 <option key={l.value} value={l.value}>
@@ -210,25 +221,44 @@ export function ItemForm({
                 type="date"
                 max={new Date().toISOString().split("T")[0]}
                 {...register("date")}
-                className="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition"
+                className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition"
               />
             </div>
           </FormField>
+
+          {watch("location") === "OTHER" && (
+            <div className="sm:col-span-2 animate-in fade-in slide-in-from-top-1 duration-200">
+              <FormField
+                label="โปรดระบุสถานที่ใน ม.แม่โจ้"
+                id="customLocation"
+                error={errors.customLocation?.message as string | undefined}
+                required
+              >
+                <input
+                  id="customLocation"
+                  type="text"
+                  placeholder="เช่น ซุ้มแปดเหลี่ยม, หน้าตึกสถาปัตย์, โรงอาหารคาวบอย, สระว่ายน้ำอุบลรัตนราชกัญญา..."
+                  {...register("customLocation")}
+                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                />
+              </FormField>
+            </div>
+          )}
         </div>
       </div>
 
       {/* หมวดที่ 3: รูปภาพและการติดต่อ */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-100">
-          <ImageIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-          <h3 className="font-bold text-base">รูปภาพและการติดต่อ</h3>
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-3.5 sm:p-5 shadow-2xs space-y-3.5 sm:space-y-4">
+        <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-100">
+          <ImageIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-purple-600 dark:text-purple-400" />
+          <h3 className="font-bold text-sm sm:text-base">รูปภาพและการติดต่อ</h3>
         </div>
 
         {/* Image Uploader */}
         <FormField
           label="รูปภาพสิ่งของ (ไม่บังคับ)"
           error={errors.imageUrl?.message as string | undefined}
-          helperText="หากไม่มีรูปภาพ ระบบจะใช้รูปสัญลักษณ์ตามหมวดหมู่อัตโนมัติ"
+          helperText="หากไม่มี จะใช้รูปไอคอนตามหมวดหมู่อัตโนมัติ"
         >
           <Controller
             control={control}
@@ -257,22 +287,22 @@ export function ItemForm({
             type="text"
             placeholder="เช่น 0812345678 หรือ student@university.ac.th"
             {...register("contact")}
-            className="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition"
+            className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100 transition"
           />
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-1.5">
-            <Lock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+          <div className="flex items-start gap-1.5 text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+            <Lock className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
             <span>
-              เพื่อความเป็นส่วนตัว ข้อมูลติดต่อจะเปิดเผยเฉพาะเมื่อมีคำขอยืนยันที่ได้รับการตอบรับแล้วเท่านั้น
+              เพื่อความเป็นส่วนตัว ข้อมูลติดต่อจะเปิดเผยเฉพาะเมื่อมีคำขอยืนยันที่ได้รับการยอมรับแล้วเท่านั้น
             </span>
           </div>
         </FormField>
       </div>
 
       {/* Form Action Buttons */}
-      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3 pt-4">
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5 pt-2">
         <Link
           href="/items"
-          className="px-5 py-2.5 text-center text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition"
+          className="min-h-[42px] sm:min-h-[44px] h-10 sm:h-11 flex items-center justify-center px-4 sm:px-5 text-center text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-750 transition active:scale-95"
         >
           ยกเลิก
         </Link>
@@ -282,7 +312,7 @@ export function ItemForm({
           loading={isSubmitting}
           disabled={isSubmitting}
           leftIcon={<Save className="w-4 h-4" />}
-          className="w-full sm:w-auto"
+          className="w-full sm:w-auto min-h-[42px] sm:min-h-[44px] h-10 sm:h-11 text-xs sm:text-sm font-semibold"
         >
           {submitLabel}
         </Button>

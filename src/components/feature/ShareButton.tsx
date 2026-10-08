@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Share2, Check, Copy } from "lucide-react";
+import { Share2, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 
@@ -13,8 +13,8 @@ export interface ShareButtonProps {
 }
 
 export function ShareButton({
-  title = "Lost & Found Campus",
-  text = "ดูรายละเอียดสิ่งของนี้ใน Lost & Found Campus",
+  title = "Lost & Found MJU (ม.แม่โจ้)",
+  text = "ดูรายละเอียดสิ่งของนี้ใน Lost & Found MJU (ม.แม่โจ้)",
   url,
   className = "",
 }: ShareButtonProps) {
@@ -55,19 +55,19 @@ export function ShareButton({
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="sm"
       onClick={handleShare}
-      className={`rounded-xl ${className}`}
+      className={`rounded-xl shrink-0 whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 ${className}`}
       leftIcon={
         copied ? (
-          <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+          <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
         ) : (
-          <Share2 className="w-4 h-4" />
+          <Share2 className="w-4 h-4 shrink-0" />
         )
       }
     >
-      {copied ? "คัดลอกแล้ว" : "แชร์"}
+      <span className="whitespace-nowrap">{copied ? "คัดลอกแล้ว" : "แชร์"}</span>
     </Button>
   );
 }

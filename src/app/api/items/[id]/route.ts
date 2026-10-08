@@ -110,6 +110,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const data = validation.data;
+    const resolvedLocation =
+      data.location === "OTHER" && data.customLocation?.trim()
+        ? `OTHER: ${data.customLocation.trim()}`
+        : data.location;
 
     const updatedItem = await prisma.item.update({
       where: { id },
@@ -117,7 +121,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         ...(data.type && { type: data.type as ItemType }),
         ...(data.title && { title: data.title }),
         ...(data.category && { category: data.category as Category }),
-        ...(data.location && { location: data.location }),
+        ...(resolvedLocation && { location: resolvedLocation }),
         ...(data.date && { date: data.date }),
         ...(data.description && { description: data.description }),
         ...(data.contact && { contact: data.contact }),

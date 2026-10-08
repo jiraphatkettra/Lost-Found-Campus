@@ -5,7 +5,7 @@ import { ItemCardData } from "@/types";
 import { StatusBadge, TypeBadge } from "./StatusBadge";
 import {
   CATEGORY_LABEL_MAP,
-  LOCATION_LABEL_MAP,
+  formatLocationName,
   CATEGORIES,
 } from "@/lib/constants";
 import {
@@ -39,7 +39,7 @@ const CategoryIconMap: Record<string, React.ReactNode> = {
 export function ItemCard({ item }: ItemCardProps) {
   const categoryConfig = CATEGORIES.find((c) => c.value === item.category);
   const categoryName = CATEGORY_LABEL_MAP[item.category] || item.category;
-  const locationName = LOCATION_LABEL_MAP[item.location] || item.location;
+  const locationName = formatLocationName(item.location);
 
   // formatDistanceToNow in Thai: "2 ชั่วโมงที่แล้ว"
   let timeAgo = "";
@@ -83,30 +83,30 @@ export function ItemCard({ item }: ItemCardProps) {
         )}
 
         {/* Badges on image */}
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-2.5 left-2.5">
           <TypeBadge type={item.type} />
         </div>
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-2.5 right-2.5">
           <StatusBadge status={item.status} />
         </div>
       </div>
 
       {/* Content Area */}
-      <div className="p-3.5 sm:p-5 flex flex-col justify-between">
+      <div className="p-3.5 sm:p-4.5 flex flex-col justify-between flex-1">
         <div>
-          <span className="inline-block text-3xs sm:text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
+          <span className="inline-block text-[10px] sm:text-[11px] font-bold text-blue-600 dark:text-blue-400 mb-0.5 sm:mb-1">
             {categoryName}
           </span>
-          <h3 className="text-xs sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1 mb-1">
+          <h3 className="text-xs sm:text-sm md:text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1 mb-1 leading-snug">
             {item.title}
           </h3>
-          <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-2.5 sm:mb-4 leading-relaxed">
+          <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-2.5 sm:mb-3 leading-relaxed">
             {item.description}
           </p>
         </div>
 
-        <div className="pt-2 sm:pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-3xs sm:text-xs text-slate-500 dark:text-slate-400">
-          <div className="flex items-center gap-1.5 truncate max-w-[55%]">
+        <div className="pt-2 sm:pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-1.5 truncate max-w-[55%] min-w-0">
             <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">{locationName}</span>
           </div>

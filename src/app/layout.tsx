@@ -16,8 +16,8 @@ const notoSansThai = Noto_Sans_Thai({
 });
 
 export const metadata: Metadata = {
-  title: "Lost & Found Campus - ศูนย์กลางแจ้งของหายและของที่เก็บได้",
-  description: "ระบบแจ้งของหายและของที่เก็บได้สำหรับนิสิต นักศึกษา และบุคลากรภายในมหาวิทยาลัย",
+  title: "Lost & Found MJU - ศูนย์กลางแจ้งของหายและของที่เก็บได้ มหาวิทยาลัยแม่โจ้",
+  description: "ระบบแจ้งของหายและของที่เก็บได้สำหรับนักศึกษาและบุคลากร มหาวิทยาลัยแม่โจ้ (Maejo University)",
 };
 
 export const viewport: Viewport = {

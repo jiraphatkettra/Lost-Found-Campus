@@ -25,7 +25,7 @@ function LoginForm() {
           เข้าสู่ระบบ
         </h1>
         <p className="mt-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-          Lost & Found Campus เพื่อแจ้งของหายและติดตามสถานะ
+          Lost & Found MJU (ม.แม่โจ้) เพื่อแจ้งของหายและติดตามสถานะ
         </p>
       </div>
 
@@ -45,9 +45,9 @@ function LoginForm() {
       <button
         onClick={handleGoogleSignIn}
         type="button"
-        className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-100 font-bold text-sm shadow-xs transition active:scale-[0.99] cursor-pointer"
+        className="w-full min-h-[48px] h-12 flex items-center justify-center gap-3 px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-100 font-bold text-sm shadow-xs transition active:scale-[0.99] cursor-pointer"
       >
-        <svg className="w-5 h-5" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
           <path
             fill="#4285F4"
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -75,7 +75,7 @@ function LoginForm() {
       <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 text-center">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:underline font-semibold"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:underline font-semibold py-1.5"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>กลับหน้าแรก</span>
@@ -87,7 +87,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-3 py-8 sm:py-12">
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-8 sm:py-12">
       <Suspense
         fallback={
           <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 text-center text-slate-400 text-sm">

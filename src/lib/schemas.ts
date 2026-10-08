@@ -13,10 +13,27 @@ export const CATEGORIES = [
 export const LOCATIONS = [
   "LIBRARY",
   "CANTEEN",
+  "BUILDING_70",
+  "BUILDING_80",
+  "THEP_BUILDING",
+  "AMNUAY_YOTSUK",
+  "PAE_PHUEAT",
+  "AGRI_FACULTY",
+  "SCIENCE_FACULTY",
+  "BUSINESS_FACULTY",
+  "ENG_FACULTY",
+  "INFO_COMM_FACULTY",
+  "ARCH_FACULTY",
+  "LIBERAL_ARTS",
+  "ECON_FACULTY",
+  "SPORTS_CENTER",
+  "DORMITORY",
+  "BANGKHEN_GATE",
+  "SAITHONG_GATE",
+  "FARM_AREA",
+  "PARKING",
   "BUILDING_A",
   "BUILDING_B",
-  "SPORTS_CENTER",
-  "PARKING",
   "OTHER",
 ] as const;
 
@@ -28,7 +45,7 @@ export const REPORT_STATUSES = ["OPEN", "RESOLVED", "DISMISSED"] as const;
 // ตรวจสอบข้อมูลติดต่อ: ต้องเป็นอีเมล หรือเบอร์โทรไทย 9–10 หลัก (ขึ้นต้นด้วย 0)
 export const contactRegex = /(^0[0-9]{8,9}$)|(^[^\s@]+@[^\s@]+\.[^\s@]+$)/;
 
-export const createItemSchema = z.object({
+export const itemBaseSchema = z.object({
   type: z.enum(ITEM_TYPES, {
     message: "กรุณาเลือกประเภท",
   }),
@@ -41,9 +58,10 @@ export const createItemSchema = z.object({
   category: z.enum(CATEGORIES, {
     message: "กรุณาเลือกหมวดหมู่",
   }),
-  location: z.enum(LOCATIONS, {
+  location: z.string({
     message: "กรุณาเลือกสถานที่",
-  }),
+  }).min(1, "กรุณาเลือกสถานที่"),
+  customLocation: z.string().optional(),
   date: z.coerce.date().refine(
     (d) => {
       const todayEnd = new Date();
@@ -95,7 +113,25 @@ export const createItemSchema = z.object({
     .optional(),
 });
 
-export const updateItemSchema = createItemSchema.partial();
+export const createItemSchema = itemBaseSchema.superRefine((data, ctx) => {
+  if (data.location === "OTHER" && (!data.customLocation || data.customLocation.trim().length < 2)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["customLocation"],
+      message: "กรุณาระบุสถานที่ใน ม.แม่โจ้ (อย่างน้อย 2 ตัวอักษร)",
+    });
+  }
+});
+
+export const updateItemSchema = itemBaseSchema.partial().superRefine((data, ctx) => {
+  if (data.location === "OTHER" && (!data.customLocation || data.customLocation.trim().length < 2)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["customLocation"],
+      message: "กรุณาระบุสถานที่ใน ม.แม่โจ้ (อย่างน้อย 2 ตัวอักษร)",
+    });
+  }
+});
 
 export const createClaimSchema = z.object({
   message: z

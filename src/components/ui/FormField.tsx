@@ -24,16 +24,16 @@ export function FormField({
 
   return (
     <div className="flex flex-col gap-1.5 w-full">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 sm:gap-2">
         <label
           htmlFor={id}
-          className="block text-sm font-medium text-slate-800 dark:text-slate-200"
+          className="block text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200"
         >
           {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+          {required && <span className="text-rose-500 ml-1">*</span>}
         </label>
         {infoText && (
-          <span className="text-xs text-slate-500 dark:text-slate-400">
+          <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">
             {infoText}
           </span>
         )}

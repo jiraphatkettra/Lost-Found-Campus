@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { ItemCardData } from "@/types";
 import { ItemCard } from "@/components/feature/ItemCard";
+import { Reveal } from "@/components/motion/Reveal";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 
 interface RecentItemsSliderProps {
@@ -84,52 +85,55 @@ export function RecentItemsSlider({ items }: RecentItemsSliderProps) {
 
   return (
     <div className="relative">
-      {/* 1. Desktop View (>=1024px): Standard 3-column Grid */}
+      {/* 1. Desktop View (>=1024px): Standard 3-column Grid with Staggered Reveal */}
       <div className="hidden lg:grid lg:grid-cols-3 gap-6">
-        {items.map((item) => (
-          <ItemCard key={item.id} item={item} />
+        {items.map((item, index) => (
+          <Reveal key={item.id} staggerIndex={index}>
+            <ItemCard item={item} />
+          </Reveal>
         ))}
       </div>
 
-      {/* 2. Mobile & Tablet View (<1024px): Auto-sliding Horizontal Carousel */}
-      <div
-        className="lg:hidden relative"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onTouchStart={() => {
-          isInteracting.current = true;
-          setIsPaused(true);
-        }}
-        onTouchEnd={() => {
-          isInteracting.current = false;
-          // รอ 2 วิค่อยเริ่ม auto slide ต่อ
-          setTimeout(() => setIsPaused(false), 2000);
-        }}
-      >
-        {/* Horizontal Scroll Track */}
+      {/* 2. Mobile & Tablet View (<1024px): Auto-sliding Horizontal Carousel with Reveal */}
+      <Reveal className="lg:hidden">
         <div
-          ref={containerRef}
-          onScroll={handleScroll}
-          className="flex gap-3.5 sm:gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-3 px-1 no-scrollbar"
-          style={{
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            WebkitOverflowScrolling: "touch",
+          className="relative"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => {
+            isInteracting.current = true;
+            setIsPaused(true);
+          }}
+          onTouchEnd={() => {
+            isInteracting.current = false;
+            // รอ 2 วิค่อยเริ่ม auto slide ต่อ
+            setTimeout(() => setIsPaused(false), 2000);
           }}
         >
-          {items.map((item, index) => (
-            <div
-              key={item.id}
-              className="shrink-0 w-[84%] min-[380px]:w-[80%] sm:w-[55%] snap-center transition-transform"
-            >
-              <ItemCard item={item} />
-            </div>
-          ))}
-        </div>
+          {/* Horizontal Scroll Track */}
+          <div
+            ref={containerRef}
+            onScroll={handleScroll}
+            className="flex gap-3.5 sm:gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-3 px-1 no-scrollbar"
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
+            {items.map((item) => (
+              <div
+                key={item.id}
+                className="shrink-0 w-[84%] min-[380px]:w-[80%] sm:w-[55%] snap-center transition-transform"
+              >
+                <ItemCard item={item} />
+              </div>
+            ))}
+          </div>
 
-        {/* Carousel Controls (Mobile / Tablet) */}
-        {total > 1 && (
-          <div className="flex items-center justify-between mt-3 px-1">
+          {/* Carousel Controls (Mobile / Tablet) */}
+          {total > 1 && (
+            <div className="flex items-center justify-between mt-3 px-1">
             {/* Dots Pagination */}
             <div className="flex items-center gap-1.5">
               {items.map((_, idx) => (
@@ -159,14 +163,14 @@ export function RecentItemsSlider({ items }: RecentItemsSliderProps) {
               <button
                 type="button"
                 onClick={() => setIsPaused(!isPaused)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95 cursor-pointer"
                 aria-label={isPaused ? "เล่นสไลด์อัตโนมัติ" : "หยุดสไลด์ชั่วคราว"}
                 title={isPaused ? "เล่นสไลด์อัตโนมัติ" : "หยุดสไลด์ชั่วคราว"}
               >
                 {isPaused ? (
-                  <Play className="w-3.5 h-3.5" />
+                  <Play className="w-4 h-4" />
                 ) : (
-                  <Pause className="w-3.5 h-3.5" />
+                  <Pause className="w-4 h-4" />
                 )}
               </button>
 
@@ -174,7 +178,7 @@ export function RecentItemsSlider({ items }: RecentItemsSliderProps) {
                 type="button"
                 onClick={prevSlide}
                 aria-label="ก่อนหน้า"
-                className="p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 shadow-2xs hover:bg-slate-50 transition"
+                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 shadow-2xs hover:bg-slate-50 transition active:scale-95 cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -183,7 +187,7 @@ export function RecentItemsSlider({ items }: RecentItemsSliderProps) {
                 type="button"
                 onClick={nextSlide}
                 aria-label="ถัดไป"
-                className="p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 shadow-2xs hover:bg-slate-50 transition"
+                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 shadow-2xs hover:bg-slate-50 transition active:scale-95 cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -191,6 +195,7 @@ export function RecentItemsSlider({ items }: RecentItemsSliderProps) {
           </div>
         )}
       </div>
+      </Reveal>
     </div>
   );
 }

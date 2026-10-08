@@ -59,7 +59,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (location) {
-      where.location = location;
+      if (location === "OTHER") {
+        where.location = { startsWith: "OTHER" };
+      } else {
+        where.location = location;
+      }
     }
 
     if (queryData.status) {
@@ -153,13 +157,17 @@ export async function POST(request: NextRequest) {
     }
 
     const data = validation.data;
+    const resolvedLocation =
+      data.location === "OTHER" && data.customLocation?.trim()
+        ? `OTHER: ${data.customLocation.trim()}`
+        : data.location;
 
     const newItem = await prisma.item.create({
       data: {
         type: data.type as ItemType,
         title: data.title,
         category: data.category as Category,
-        location: data.location,
+        location: resolvedLocation,
         date: data.date,
         description: data.description,
         contact: data.contact,

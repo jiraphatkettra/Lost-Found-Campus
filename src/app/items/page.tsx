@@ -43,7 +43,11 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
   }
 
   if (location) {
-    where.location = location;
+    if (location === "OTHER") {
+      where.location = { startsWith: "OTHER" };
+    } else {
+      where.location = location;
+    }
   }
 
   if (status) {
@@ -94,7 +98,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10 lg:py-12">
       {/* Page Header (Section 7.3: ชื่อ + คำอธิบาย + จำนวนผลลัพธ์) */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div>
@@ -102,23 +106,23 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
             <span className="p-1.5 bg-blue-50 dark:bg-blue-950/60 rounded-lg text-blue-600 dark:text-blue-400">
               <Layers className="w-4 h-4" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 tabular-nums">
               พบ {total} รายการ
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.3] [text-wrap:balance]">
             รายการของหายและของที่พบ
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-            ค้นหา ตรวจสอบรายละเอียด หรือส่งคำขอรับสิ่งของคืนในรั้วมหาวิทยาลัย
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 [text-wrap:balance]">
+            ค้นหา ตรวจสอบรายละเอียด หรือส่งคำขอรับสิ่งของคืนในมหาวิทยาลัยแม่โจ้
           </p>
         </div>
 
         <Link
           href="/items/new"
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition active:scale-95 w-full sm:w-auto shrink-0"
+          className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 h-10 sm:h-11 min-h-[40px] sm:min-h-[44px] rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-sm shadow-blue-600/20 transition active:scale-95 w-full sm:w-auto shrink-0"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 shrink-0" />
           <span>สร้างประกาศใหม่</span>
         </Link>
       </div>

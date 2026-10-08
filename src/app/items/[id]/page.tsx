@@ -1,8 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
 import type { Metadata } from "next";
 import { StatusBadge } from "@/components/feature/StatusBadge";
 import { TypeBadge } from "@/components/feature/TypeBadge";
@@ -12,30 +10,14 @@ import { ClaimCard } from "@/components/feature/ClaimCard";
 import { ShareButton } from "@/components/feature/ShareButton";
 import { ContactCard } from "@/components/feature/ContactCard";
 import { Avatar } from "@/components/ui/Avatar";
+import { ItemGallery } from "@/components/feature/ItemGallery";
+import { ItemFacts } from "@/components/feature/ItemFacts";
+import { ItemDescription } from "@/components/feature/ItemDescription";
+import { BackButton } from "@/components/feature/BackButton";
 import { canViewItemContact } from "@/lib/contact-visibility";
-import { formatRelativeTime, formatThaiDate } from "@/lib/date";
-import {
-  CATEGORY_LABEL_MAP,
-  LOCATION_LABEL_MAP,
-  CATEGORY_PLACEHOLDER_MAP,
-} from "@/lib/constants";
-import {
-  ArrowLeft,
-  Tag,
-  MapPin,
-  Calendar,
-  Lock,
-  Phone,
-  ShieldAlert,
-  Inbox,
-  BookOpen,
-  Smartphone,
-  CreditCard,
-  Backpack,
-  Shirt,
-  KeyRound,
-  Package,
-} from "lucide-react";
+import { formatRelativeTime, formatFullThaiDateTime } from "@/lib/date";
+import { CONTAINER, TYPE_SCALE, SURFACES } from "@/lib/ui";
+import { Lock, ShieldAlert, Inbox, CheckCircle2 } from "lucide-react";
 
 interface ItemDetailPageProps {
   params: Promise<{ id: string }>;
@@ -52,16 +34,16 @@ export async function generateMetadata({
 
   if (!item) {
     return {
-      title: "ไม่พบประกาศ | Lost & Found Campus",
+      title: "ไม่พบประกาศ | Lost & Found MJU",
     };
   }
 
   const typeText = item.type === "LOST" ? "ของหาย" : "ของที่พบ";
   return {
-    title: `${item.title} (${typeText}) | Lost & Found Campus`,
+    title: `${item.title} (${typeText}) | Lost & Found MJU`,
     description: item.description.slice(0, 160),
     openGraph: {
-      title: `${item.title} (${typeText}) | Lost & Found Campus`,
+      title: `${item.title} (${typeText}) | Lost & Found MJU`,
       description: item.description.slice(0, 160),
       ...(item.imageUrl ? { images: [{ url: item.imageUrl }] } : {}),
     },
@@ -155,194 +137,164 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
     }
   }
 
-  const categoryName = CATEGORY_LABEL_MAP[item.category] || item.category;
-  const locationName = LOCATION_LABEL_MAP[item.location] || item.location;
-  const placeholderConfig =
-    CATEGORY_PLACEHOLDER_MAP[item.category] ||
-    CATEGORY_PLACEHOLDER_MAP.OTHER;
-
-  const getCategoryVectorIcon = (category: string) => {
-    switch (category) {
-      case "BOOK":
-        return <BookOpen className="w-16 h-16 sm:w-24 sm:h-24 opacity-80" />;
-      case "ELECTRONICS":
-        return <Smartphone className="w-16 h-16 sm:w-24 sm:h-24 opacity-80" />;
-      case "CARD":
-        return <CreditCard className="w-16 h-16 sm:w-24 sm:h-24 opacity-80" />;
-      case "BAG":
-        return <Backpack className="w-16 h-16 sm:w-24 sm:h-24 opacity-80" />;
-      case "CLOTHES":
-        return <Shirt className="w-16 h-16 sm:w-24 sm:h-24 opacity-80" />;
-      case "KEYS":
-        return <KeyRound className="w-16 h-16 sm:w-24 sm:h-24 opacity-80" />;
-      default:
-        return <Package className="w-16 h-16 sm:w-24 sm:h-24 opacity-80" />;
-    }
-  };
+  const isClaimAccepted = userClaimSummary?.status === "ACCEPTED";
+  const isClaimPending = userClaimSummary?.status === "PENDING";
+  const isReturned = item.status === "RETURNED";
 
   return (
-    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-12">
-      {/* Back button */}
-      <div className="mb-4 sm:mb-6">
-        <Link
-          href="/items"
-          className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition group"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform shrink-0" />
-          <span className="truncate">กลับหน้ารายการสิ่งของ</span>
-        </Link>
+    <div className={`${CONTAINER} py-6 sm:py-8 space-y-6 sm:space-y-8 pb-20 sm:pb-12`}>
+      {/* 5.1 แถวนำทางด้านบน */}
+      <div className="pt-1">
+        <BackButton fallbackHref="/items" label="กลับไปรายการ" />
       </div>
 
-      {/* Hidden banner for owner/admin */}
+      {/* 5.7 แบนเนอร์สถานะถูกซ่อน (เฉพาะเจ้าของ/ADMIN) */}
       {item.isHidden && (
-        <div className="mb-4 sm:mb-6 p-3.5 sm:p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 flex items-center gap-3 text-rose-700 dark:text-rose-300">
-          <ShieldAlert className="w-5 h-5 shrink-0 text-rose-600" />
-          <p className="text-xs sm:text-sm font-semibold">
-            ประกาศนี้ถูกซ่อนโดยผู้ดูแลระบบ และจะไม่แสดงในรายการค้นหาสาธารณะ
-          </p>
+        <div className={`${SURFACES.accentRose} p-3.5 sm:p-4 flex items-center gap-3 text-rose-800 dark:text-rose-200 text-sm font-medium`}>
+          <ShieldAlert className="w-5 h-5 shrink-0 text-rose-600 dark:text-rose-400" />
+          <p>ประกาศนี้ถูกซ่อนโดยผู้ดูแลระบบ และจะไม่แสดงในรายการค้นหาสาธารณะ</p>
         </div>
       )}
 
-      {/* Main 2-Column Detail Card (Section 7.4: 60% Left Image | 40% Right Info) */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-          {/* Left Column (Images/Placeholder) 60% on desktop (col-span-7) */}
-          <div className="lg:col-span-7 relative aspect-4/3 sm:aspect-auto sm:min-h-[360px] lg:min-h-[520px] bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800">
-            {item.imageUrl ? (
-              <Image
-                src={item.imageUrl}
-                alt={item.title}
-                fill
-                priority
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 60vw"
-              />
-            ) : (
-              <div
-                className={`w-full h-full aspect-4/3 sm:aspect-auto sm:min-h-[360px] lg:min-h-[520px] bg-gradient-to-br ${placeholderConfig.gradient} flex flex-col items-center justify-center text-white/90 p-4 sm:p-8`}
-              >
-                {getCategoryVectorIcon(item.category)}
-                <span className="text-xs sm:text-sm font-bold mt-2.5 sm:mt-3 tracking-wide uppercase opacity-90">
-                  {categoryName}
-                </span>
-                <span className="text-2xs sm:text-xs text-white/70 mt-0.5">
-                  ไม่มีรูปภาพประกอบ
-                </span>
-              </div>
-            )}
-          </div>
+      {/* 5.0 Main Grid Layout (2 คอลัมน์ 7/5 บนจอใหญ่) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* คอลัมน์ซ้าย (7/12): ItemGallery 4:3 sticky */}
+        <div className="lg:col-span-7">
+          <ItemGallery
+            imageUrl={item.imageUrl}
+            title={item.title}
+            category={item.category}
+          />
+        </div>
 
-          {/* Right Column (Info) 40% on desktop (col-span-5) */}
-          <div className="lg:col-span-5 p-3.5 sm:p-6 lg:p-8 flex flex-col justify-between space-y-4 sm:space-y-6">
-            <div className="space-y-3.5 sm:space-y-5">
-              {/* Badges + Share */}
-              <div className="flex items-center justify-between gap-2.5">
-                <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* คอลัมน์ขวา (5/12): การ์ดข้อมูลหลัก Surface 'card' พร้อม divide-y */}
+        <div className="lg:col-span-5">
+          <div className={`${SURFACES.card} p-5 sm:p-6 lg:p-7 space-y-5 divide-y divide-slate-100 dark:divide-slate-800 shadow-xs`}>
+            {/* Section 1: Header Row + Title + Poster Line */}
+            <div className="space-y-3.5">
+              {/* Header Row: Badges + Ghost Share Button */}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                   <TypeBadge type={item.type} />
                   <StatusBadge status={item.status} />
                 </div>
-                <ShareButton title={item.title} />
+                <div className="shrink-0 ml-auto">
+                  <ShareButton title={item.title} />
+                </div>
               </div>
 
+              {/* แบนเนอร์สถานะ RETURNED (ถ้าส่งคืนแล้ว) */}
+              {isReturned && (
+                <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 text-xs font-semibold flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                  <span>ประกาศนี้ปิดแล้ว ส่งคืนเรียบร้อย</span>
+                </div>
+              )}
+
               {/* Title (H1) */}
-              <h1 className="text-lg sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug">
+              <h1 className={`${TYPE_SCALE.h1} text-slate-900 dark:text-white break-words mt-2`}>
                 {item.title}
               </h1>
 
-              {/* Attributes List */}
-              <div className="space-y-2 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800 text-xs sm:text-sm">
-                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <Tag className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
-                  <span className="text-slate-500 dark:text-slate-400 w-16 sm:w-20 shrink-0">หมวดหมู่:</span>
-                  <span className="font-semibold text-slate-900 dark:text-white truncate">
-                    {categoryName}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <span className="text-slate-500 dark:text-slate-400 w-16 sm:w-20 shrink-0">สถานที่:</span>
-                  <span className="font-semibold text-slate-900 dark:text-white truncate">
-                    {locationName}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                  <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                  <span className="text-slate-500 dark:text-slate-400 w-16 sm:w-20 shrink-0">วันที่:</span>
-                  <span className="font-semibold text-slate-900 dark:text-white truncate">
-                    {formatThaiDate(item.date)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
-                  รายละเอียด
-                </h2>
-                <div className="p-4 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
-                  {item.description}
-                </div>
-              </div>
-
-              {/* Poster Profile */}
-              <div className="flex items-center gap-3 pt-2">
+              {/* Poster Line */}
+              <div className="flex items-center gap-2.5 text-xs text-slate-500 dark:text-slate-400 pt-1">
                 <Avatar
                   src={item.owner.image}
                   name={item.owner.name || "ผู้ใช้งาน"}
-                  size="md"
+                  size="sm"
                 />
-                <div>
-                  <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
-                    {item.owner.name || "ผู้ใช้มหาวิทยาลัย"}
-                  </div>
-                  <div className="text-xs text-slate-400">
-                    โพสต์เมื่อ {formatRelativeTime(item.createdAt)}
-                  </div>
-                </div>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">
+                  {item.owner.name || "ผู้ใช้งานทั่วไป"}
+                </span>
+                <span>·</span>
+                <span
+                  title={formatFullThaiDateTime(item.createdAt)}
+                  className="cursor-help"
+                >
+                  {formatRelativeTime(item.createdAt)}
+                </span>
               </div>
+            </div>
 
-              {/* Contact Information (ตามกฎการเปิดเผย Section 4.1) */}
+            {/* Section 2: ItemFacts (หมวดหมู่ / สถานที่ / วันที่) */}
+            <div className="pt-5">
+              <ItemFacts
+                category={item.category}
+                location={item.location}
+                date={item.date}
+              />
+            </div>
+
+            {/* Section 3: ลำดับเนื้อหาตามบทบาทผู้ดู (สเปก 5.4) */}
+            <div className="pt-5 space-y-5">
+              {/* กรณี 1 & 2: ยังไม่ล็อกอิน หรือเป็นผู้ใช้ทั่วไป/PENDING -> ปุ่มหลักอยู่ก่อนรายละเอียด */}
+              {(!session?.user || (!isOwner && !isClaimAccepted)) && (
+                <div>
+                  <ItemActions
+                    itemId={item.id}
+                    itemTitle={item.title}
+                    itemType={item.type}
+                    initialStatus={item.status}
+                    isOwner={false}
+                    isLoggedIn={Boolean(session?.user)}
+                    userClaim={userClaimSummary}
+                  />
+                </div>
+              )}
+
+              {/* รายละเอียดประกาศ */}
+              <ItemDescription description={item.description} />
+
+              {/* ข้อมูลติดต่อ (ตามสิทธิ์ 4.1) */}
               {canSeeContact ? (
-                <ContactCard contact={item.contact} />
+                <ContactCard
+                  contact={item.contact}
+                  isOwner={isOwner}
+                  isAdmin={isAdmin && !isOwner}
+                  isAcceptedClaimant={isClaimAccepted}
+                />
               ) : (
-                <div className="p-3 sm:p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-center gap-2.5 text-xs text-slate-500 dark:text-slate-400">
-                  <Lock className="w-4 h-4 text-slate-400 shrink-0" />
+                /* ข้อความล็อกข้อมูลติดต่อ */
+                <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-start gap-2.5 text-xs text-slate-500 dark:text-slate-400">
+                  <Lock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
                   <span className="leading-relaxed">
-                    ข้อมูลติดต่อจะแสดงเมื่อคุณส่งคำขอ (Claim) และได้รับการตอบรับจากเจ้าของ
+                    ข้อมูลติดต่อจะแสดงเมื่อคุณส่งคำขอ (Claim) และได้รับการตอบรับจากเจ้าของประกาศ
                   </span>
                 </div>
               )}
-            </div>
 
-            {/* Action Buttons (Claim/Report หรือ StatusChanger/Edit/Delete) */}
-            <ItemActions
-              itemId={item.id}
-              itemTitle={item.title}
-              itemType={item.type}
-              initialStatus={item.status}
-              isOwner={isOwner}
-              isLoggedIn={Boolean(session?.user)}
-              userClaim={userClaimSummary}
-            />
+              {/* แผงจัดการของเจ้าของประกาศ (OwnerPanel) */}
+              {isOwner && (
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <ItemActions
+                    itemId={item.id}
+                    itemTitle={item.title}
+                    itemType={item.type}
+                    initialStatus={item.status}
+                    isOwner={true}
+                    isLoggedIn={true}
+                    userClaim={null}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Owner Claims List Section (ถ้าเป็นเจ้าของประกาศ) */}
+      {/* 5.0 ส่วนเต็มความกว้างใต้ Grid: คำขอที่ได้รับ (เฉพาะเจ้าของ) */}
       {isOwner && (
-        <section className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-slate-200 dark:border-slate-800 space-y-4 sm:space-y-6">
+        <section className="mt-10 sm:mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 space-y-5">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 sm:p-2 bg-blue-50 dark:bg-blue-950/50 rounded-xl text-blue-600 dark:text-blue-400 shrink-0">
-              <Inbox className="w-4 h-4 sm:w-5 sm:h-5" />
+            <div className="p-2 bg-blue-50 dark:bg-blue-950/50 rounded-xl text-blue-600 dark:text-blue-400 shrink-0">
+              <Inbox className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+              <h2 className={`${TYPE_SCALE.h2} text-slate-900 dark:text-white`}>
                 คำขอที่ได้รับ ({claimsList.length})
               </h2>
-              <p className="text-2xs sm:text-xs text-slate-500 dark:text-slate-400">
-                รายการคำขอยืนยันความเป็นเจ้าของหรือการพบของจากผู้ใช้งานอื่น
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                รายการคำขอยืนยันความเป็นเจ้าของหรือการส่งมอบจากผู้ใช้งานอื่น
               </p>
             </div>
           </div>
@@ -368,8 +320,10 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
         </section>
       )}
 
-      {/* Matching Items Suggestions */}
-      <MatchSuggestions itemId={item.id} />
+      {/* 5.0 ส่วนเต็มความกว้างใต้ Grid: รายการที่น่าจะตรงกัน (Match Suggestions) */}
+      <section className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
+        <MatchSuggestions itemId={item.id} />
+      </section>
     </div>
   );
 }

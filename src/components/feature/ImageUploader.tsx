@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useRef, ChangeEvent, DragEvent } from "react";
-import Image from "next/image";
 import { UploadCloud, X, Loader2, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 
@@ -115,8 +114,8 @@ export function ImageUploader({ value, onChange }: ImageUploaderProps) {
       />
 
       {currentImageUrl ? (
-        <div className="relative inline-block border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs bg-slate-50 dark:bg-slate-900 group">
-          <div className="relative w-48 h-48 sm:w-56 sm:h-56">
+        <div className="relative inline-block border border-slate-200 dark:border-slate-800 rounded-xl sm:rounded-2xl overflow-hidden shadow-xs bg-slate-50 dark:bg-slate-900 group">
+          <div className="relative w-36 h-36 sm:w-48 sm:h-48">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={currentImageUrl}
@@ -125,8 +124,8 @@ export function ImageUploader({ value, onChange }: ImageUploaderProps) {
             />
             {isUploading && (
               <div className="absolute inset-0 bg-slate-950/50 backdrop-blur-2xs flex flex-col items-center justify-center text-white">
-                <Loader2 className="w-6 h-6 animate-spin mb-1.5" />
-                <span className="text-xs font-semibold">กำลังอัปโหลด...</span>
+                <Loader2 className="w-5 h-5 animate-spin mb-1" />
+                <span className="text-[11px] font-semibold">กำลังอัปโหลด...</span>
               </div>
             )}
           </div>
@@ -134,10 +133,10 @@ export function ImageUploader({ value, onChange }: ImageUploaderProps) {
             <button
               type="button"
               onClick={handleRemove}
-              className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-slate-900/70 hover:bg-red-600 text-white backdrop-blur-xs transition shadow-sm cursor-pointer"
+              className="absolute top-2 right-2 p-1.5 rounded-full bg-slate-900/70 hover:bg-red-600 text-white backdrop-blur-xs transition shadow-sm cursor-pointer"
               aria-label="ลบรูปภาพ"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
@@ -147,26 +146,26 @@ export function ImageUploader({ value, onChange }: ImageUploaderProps) {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className={`flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-2xl cursor-pointer transition-colors duration-200 ${
+          className={`flex flex-col items-center justify-center p-3.5 sm:p-5 border-2 border-dashed rounded-xl sm:rounded-2xl cursor-pointer transition-colors duration-200 ${
             isDragging
               ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/20"
               : "border-slate-300 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 hover:bg-slate-100/70 dark:hover:bg-slate-800/70"
           }`}
         >
           {isUploading ? (
-            <div className="flex flex-col items-center py-4 text-slate-500 dark:text-slate-400">
-              <Loader2 className="w-8 h-8 animate-spin text-blue-600 mb-2" />
-              <p className="text-sm font-medium">กำลังอัปโหลดรูปภาพ...</p>
+            <div className="flex flex-col items-center py-2.5 text-slate-500 dark:text-slate-400">
+              <Loader2 className="w-6 h-6 animate-spin text-blue-600 mb-1.5" />
+              <p className="text-xs sm:text-sm font-medium">กำลังอัปโหลดรูปภาพ...</p>
             </div>
           ) : (
             <div className="flex flex-col items-center text-center">
-              <div className="p-3 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-xl mb-3">
-                <UploadCloud className="w-6 h-6" />
+              <div className="p-2 sm:p-2.5 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-xl mb-1.5 sm:mb-2">
+                <UploadCloud className="w-5 h-5" />
               </div>
-              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <p className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
                 ลากไฟล์มาวางที่นี่ หรือ <span className="text-blue-600 dark:text-blue-400">เลือกไฟล์</span>
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <p className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                 JPEG, PNG, WebP ขนาดไม่เกิน 3 MB
               </p>
             </div>

@@ -2,15 +2,48 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --font-sans: var(--font-noto-sans-thai), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
 @layer base {
+  *, ::before, ::after {
+    font-family: inherit;
+  }
   html, body {
     overflow-x: hidden;
     max-width: 100vw;
+    font-family: var(--font-noto-sans-thai), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
   body {
     @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-150;
+    /* Thai typography defaults: generous line-height to prevent vowel/tone marks clipping */
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Headings Thai typography line-height */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.35;
+    text-wrap: balance;
+    font-family: var(--font-noto-sans-thai), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Form controls and buttons inherit website font */
+  button, input, select, textarea {
+    font-family: inherit;
   }
 }
+
+/* Safe area utilities for modern mobile browsers (iOS notch / Home indicator) */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
 
 @keyframes float-slow {
   0%, 100% {
@@ -39,6 +72,24 @@
   }
 }
 
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes float-subtle-reverse {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
 .animate-float-slow {
   animation: float-slow 6s ease-in-out infinite;
 }
@@ -51,12 +102,78 @@
   animation: float-pulse 4.5s ease-in-out infinite;
 }
 
+.animate-float-subtle {
+  animation: float-subtle 6s ease-in-out infinite;
+}
+
+.animate-float-subtle-reverse {
+  animation: float-subtle-reverse 5.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-float-slow,
   .animate-float-reverse,
-  .animate-float-pulse {
+  .animate-float-pulse,
+  .animate-float-subtle,
+  .animate-float-subtle-reverse {
     animation: none !important;
   }
 }
+
+/* ==========================================================================
+   Motion Layer Engine (v2.3)
+   ========================================================================== */
+:root {
+  --p: 1;
+  --blur: 0px;
+  --y: 0px;
+  --opacity: 1;
+  --hero-parallax: 0px;
+  --hero-opacity: 1;
+  --hero-blur: 0px;
+  --hero-scale: 1;
+}
+
+/* Progressive Enhancement: เมื่อยังไม่มี data-motion="ready" ให้แสดงผลตามปกติ 100% */
+html:not([data-motion="ready"]) .motion-reveal,
+html:not([data-motion="ready"]) .motion-hero-parallax {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+/* Utility classes สำหรับผูกกับ CSS variables */
+.motion-reveal {
+  opacity: var(--opacity, 1);
+  transform: translateY(var(--y, 0px));
+  filter: blur(var(--blur, 0px));
+  will-change: opacity, transform, filter;
+}
+
+.motion-reveal[data-active="complete"] {
+  will-change: auto;
+}
+
+.motion-hero-parallax {
+  transform: translateY(var(--hero-parallax, 0px)) scale(var(--hero-scale, 1));
+  opacity: var(--hero-opacity, 1);
+  filter: blur(var(--hero-blur, 0px));
+  will-change: transform, opacity, filter;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  html[data-motion="ready"] .motion-reveal,
+  html[data-motion="ready"] .motion-hero-parallax,
+  html[data-reduced-motion="true"] .motion-reveal,
+  html[data-reduced-motion="true"] .motion-hero-parallax {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+}
+
 
 

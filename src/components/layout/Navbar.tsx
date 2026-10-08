@@ -13,6 +13,7 @@ import {
   Menu,
   ChevronDown,
   Gift,
+  Package,
 } from "lucide-react";
 import { NavLink } from "./NavLink";
 import { ThemeToggle } from "./ThemeToggle";
@@ -20,6 +21,7 @@ import { NotificationBell } from "./NotificationBell";
 import { UserMenu } from "./UserMenu";
 import { MobileDrawer } from "./MobileDrawer";
 import { Dropdown } from "@/components/ui/Dropdown";
+import { CONTAINER } from "@/lib/ui";
 
 export function Navbar() {
   const router = useRouter();
@@ -27,6 +29,10 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const handleCloseDrawer = React.useCallback(() => {
+    setDrawerOpen(false);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,14 +56,14 @@ export function Navbar() {
           scrolled ? "shadow-sm dark:shadow-slate-950/40" : ""
         }`}
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-6">
+        <div className={CONTAINER}>
           <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
             {/* Left: Logo & Nav Links */}
             <div className="flex items-center gap-2 sm:gap-3 xl:gap-6 shrink-0">
               {/* Logo */}
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 sm:gap-2.5 group shrink-0 whitespace-nowrap"
+                className="inline-flex items-center gap-2 sm:gap-2.5 group shrink-0 whitespace-nowrap py-1"
               >
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform shrink-0">
                   <SearchCheck className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -65,7 +71,7 @@ export function Navbar() {
                 <span className="font-extrabold text-sm min-[380px]:text-base sm:text-lg text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
                   <span className="hidden min-[380px]:inline">Lost & Found </span>
                   <span className="min-[380px]:hidden">L&F </span>
-                  <span className="text-blue-600">Campus</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">MJU</span>
                 </span>
               </Link>
 
@@ -78,7 +84,7 @@ export function Navbar() {
                   รายการสิ่งของ
                 </NavLink>
                 {session?.user && (
-                  <NavLink href="/my-items">
+                  <NavLink href="/my-items" icon={<Package className="w-4 h-4" />}>
                     ประกาศของฉัน
                   </NavLink>
                 )}
@@ -95,9 +101,9 @@ export function Navbar() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="ค้นหาของที่หาย..."
-                className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-100/80 dark:bg-slate-800/80 border border-transparent focus:border-blue-500 rounded-xl focus:outline-none focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
+                className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-100/80 dark:bg-slate-800/80 border border-transparent focus:border-blue-500 rounded-xl focus:outline-none focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-800 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
               />
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
+              <Search className="w-4 h-4 text-slate-500 dark:text-slate-400 absolute left-3 pointer-events-none" />
             </form>
 
             {/* Right actions */}
@@ -144,7 +150,16 @@ export function Navbar() {
                 <>
                   <NotificationBell />
                   <div className="hidden sm:block">
-                    <UserMenu user={session.user as any} />
+                    <UserMenu
+                      user={{
+                        id: session.user.id || "",
+                        name: session.user.name,
+                        email: session.user.email,
+                        image: session.user.image,
+                        // @ts-expect-error - session role property
+                        role: session.user.role,
+                      }}
+                    />
                   </div>
                 </>
               ) : (
@@ -177,7 +192,7 @@ export function Navbar() {
               {/* Hamburger Button (Mobile & Tablet <1024px) */}
               <button
                 onClick={() => setDrawerOpen(true)}
-                className="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95 cursor-pointer"
                 aria-label="เปิดเมนูนำทาง"
               >
                 <Menu className="w-5 h-5" />
@@ -190,8 +205,19 @@ export function Navbar() {
       {/* Mobile Drawer */}
       <MobileDrawer
         open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        user={session?.user as any}
+        onClose={handleCloseDrawer}
+        user={
+          session?.user
+            ? {
+                id: session.user.id || "",
+                name: session.user.name,
+                email: session.user.email,
+                image: session.user.image,
+                // @ts-expect-error - session role property
+                role: session.user.role,
+              }
+            : null
+        }
       />
     </>
   );

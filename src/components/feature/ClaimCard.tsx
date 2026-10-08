@@ -74,26 +74,30 @@ export function ClaimCard({
     switch (claim.status) {
       case "ACCEPTED":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-            <Check className="w-3.5 h-3.5" /> ตอบรับแล้ว
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+            <Check className="w-3.5 h-3.5 shrink-0" />
+            <span className="whitespace-nowrap">ตอบรับแล้ว</span>
           </span>
         );
       case "REJECTED":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
-            <X className="w-3.5 h-3.5" /> ปฏิเสธแล้ว
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
+            <X className="w-3.5 h-3.5 shrink-0" />
+            <span className="whitespace-nowrap">ปฏิเสธแล้ว</span>
           </span>
         );
       case "CANCELLED":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-            <Ban className="w-3.5 h-3.5" /> ยกเลิกแล้ว
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+            <Ban className="w-3.5 h-3.5 shrink-0" />
+            <span className="whitespace-nowrap">ยกเลิกแล้ว</span>
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-            <Clock className="w-3.5 h-3.5" /> รอการตอบรับ
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+            <Clock className="w-3.5 h-3.5 shrink-0" />
+            <span className="whitespace-nowrap">รอการตอบรับ</span>
           </span>
         );
     }
@@ -129,7 +133,7 @@ export function ClaimCard({
         <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400">
           <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <span className="font-medium text-2xs sm:text-xs">ติดต่อ:</span>
-          <span className="font-semibold text-slate-900 dark:text-slate-100 select-all font-mono text-xs">
+          <span className="font-semibold text-slate-900 dark:text-slate-100 select-all tabular-nums text-xs">
             {claim.claimantContact}
           </span>
         </div>
