@@ -17,46 +17,55 @@ export default async function HomePage() {
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-  // คำนวณสถิติจากฐานข้อมูลจริง (ไม่นับ isHidden)
-  const [searchingCount, returnedCount, recentCount, latestItems] =
-    await Promise.all([
-      prisma.item.count({
-        where: {
-          status: "SEARCHING",
-          isHidden: false,
-        },
-      }),
-      prisma.item.count({
-        where: {
-          status: "RETURNED",
-          isHidden: false,
-        },
-      }),
-      prisma.item.count({
-        where: {
-          createdAt: { gte: oneWeekAgo },
-          isHidden: false,
-        },
-      }),
-      prisma.item.findMany({
-        where: {
-          isHidden: false,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 6,
-        include: {
-          owner: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
+  // คำนวณสถิติจากฐานข้อมูลจริง (ไม่นับ isHidden) พร้อมระบบป้องกันกรณีเชื่อมต่อฐานข้อมูลไม่ได้ตอน build บน Vercel
+  let searchingCount = 0;
+  let returnedCount = 0;
+  let recentCount = 0;
+  let latestItems: any[] = [];
+
+  try {
+    [searchingCount, returnedCount, recentCount, latestItems] =
+      await Promise.all([
+        prisma.item.count({
+          where: {
+            status: "SEARCHING",
+            isHidden: false,
+          },
+        }),
+        prisma.item.count({
+          where: {
+            status: "RETURNED",
+            isHidden: false,
+          },
+        }),
+        prisma.item.count({
+          where: {
+            createdAt: { gte: oneWeekAgo },
+            isHidden: false,
+          },
+        }),
+        prisma.item.findMany({
+          where: {
+            isHidden: false,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 6,
+          include: {
+            owner: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              },
             },
           },
-        },
-      }),
-    ]);
+        }),
+      ]);
+  } catch (error) {
+    console.error("Home page: Failed to fetch items/stats from database (check DATABASE_URL):", error);
+  }
 
   return (
     <MotionProvider>
