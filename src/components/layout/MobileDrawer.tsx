@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { Avatar } from "@/components/ui/Avatar";
@@ -76,9 +77,20 @@ export function MobileDrawer({ open, onClose, user }: MobileDrawerProps) {
         <div className="space-y-5 sm:space-y-6">
           {/* Header */}
           <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
-            <span className="font-extrabold text-base bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-              Lost & Found MJU
-            </span>
+            <div className="flex items-center gap-2">
+              <div className="relative w-8 h-8 shrink-0">
+                <Image
+                  src="/logo.png"
+                  alt="MOBKHONG MJU Logo"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <span className="font-extrabold text-base bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                MOBKHONG MJU
+              </span>
+            </div>
             <button
               onClick={onClose}
               className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95 cursor-pointer"

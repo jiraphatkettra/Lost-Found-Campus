@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { SearchCheck, Heart } from "lucide-react";
+import Image from "next/image";
+import { Heart } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -12,11 +13,17 @@ export function Footer() {
           {/* Logo & Description */}
           <div className="md:col-span-2 space-y-3">
             <Link href="/" className="inline-flex items-center gap-2.5 group py-1">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm">
-                <SearchCheck className="w-5 h-5" />
+              <div className="relative w-9 h-9 shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
+                <Image
+                  src="/logo.png"
+                  alt="MOBKHONG MJU Logo"
+                  width={36}
+                  height={36}
+                  className="w-full h-full object-contain drop-shadow-xs"
+                />
               </div>
               <span className="font-extrabold text-base text-slate-900 dark:text-white">
-                Lost & Found <span className="text-emerald-600 dark:text-emerald-400">MJU</span>
+                MOBKHONG <span className="text-emerald-600 dark:text-emerald-400">MJU</span>
               </span>
             </Link>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed [text-wrap:balance]">
@@ -61,10 +68,9 @@ export function Footer() {
 
         {/* Bottom copyright */}
         <div className="pt-6 sm:pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs text-slate-500 dark:text-slate-400 text-center sm:text-left">
-          <p>© {currentYear} Lost & Found MJU (มหาวิทยาลัยแม่โจ้). สงวนลิขสิทธิ์ทุกประการ</p>
+          <p>© {currentYear} MOBKHONG MJU เด็กโจ้. สงวนลิขสิทธิ์ทุกประการ</p>
           <p className="flex items-center justify-center gap-1">
-            <span>พัฒนาด้วย</span>
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
+            <span>พัฒนาด้วยเด็กโจ้</span>
             <span>เพื่อสังคมชาวแม่โจ้</span>
           </p>
         </div>

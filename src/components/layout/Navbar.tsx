@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
-  SearchCheck,
   Search,
   Plus,
   Home,
@@ -52,9 +52,8 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-200 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 ${
-          scrolled ? "shadow-sm dark:shadow-slate-950/40" : ""
-        }`}
+        className={`sticky top-0 z-40 w-full transition-all duration-200 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 ${scrolled ? "shadow-sm dark:shadow-slate-950/40" : ""
+          }`}
       >
         <div className={CONTAINER}>
           <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
@@ -65,13 +64,18 @@ export function Navbar() {
                 href="/"
                 className="inline-flex items-center gap-2 sm:gap-2.5 group shrink-0 whitespace-nowrap py-1"
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform shrink-0">
-                  <SearchCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+                <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 group-hover:scale-105 transition-transform duration-200 flex items-center justify-center">
+                  <Image
+                    src="/logo.png"
+                    alt=" MOBKHONG MJU Logo"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-contain drop-shadow-xs"
+                    priority
+                  />
                 </div>
-                <span className="font-extrabold text-sm min-[380px]:text-base sm:text-lg text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
-                  <span className="hidden min-[380px]:inline">Lost & Found </span>
-                  <span className="min-[380px]:hidden">L&F </span>
-                  <span className="text-emerald-600 dark:text-emerald-400">MJU</span>
+                <span className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
+                  MOBKHONG <span className="text-emerald-600 dark:text-emerald-400">MJU</span>
                 </span>
               </Link>
 
@@ -209,13 +213,13 @@ export function Navbar() {
         user={
           session?.user
             ? {
-                id: session.user.id || "",
-                name: session.user.name,
-                email: session.user.email,
-                image: session.user.image,
-                // @ts-expect-error - session role property
-                role: session.user.role,
-              }
+              id: session.user.id || "",
+              name: session.user.name,
+              email: session.user.email,
+              image: session.user.image,
+              // @ts-expect-error - session role property
+              role: session.user.role,
+            }
             : null
         }
       />
