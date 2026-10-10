@@ -35,7 +35,7 @@ export type ItemCardData = {
   };
 };
 
-export interface ApiErrorResponse {
+export type ApiErrorResponse = {
   error: string;
   details?: Record<string, string>;
-}
+};

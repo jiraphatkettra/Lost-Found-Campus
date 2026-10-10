@@ -4,14 +4,10 @@ import React from "react";
 import { useActiveSection, DEFAULT_HOME_SECTIONS } from "@/lib/scroll/useActiveSection";
 
 /**
- * SectionRail (v2.3 Motion Layer - B6):
- * - เดสก์ท็อป (>=1024px):
- *   - ป้ายมุมขวาบนใต้ Navbar แสดงชื่อ Section ปัจจุบันตัวหนาใหญ่ ด้วยการม้วนในกรอบตัดขอบ (Vertical Roll Mask)
- *   - แสดง Section ก่อนหน้าตัวเล็กจางอยู่เหนือขึ้นไป
- *   - มุมขวาล่างแสดงรายชื่อ Section ถัดไปที่กำลังจะมาถึงแบบจาง ๆ
- * - มือถือ/แท็บเล็ต (<1024px):
- *   - ชิปมินิมอลติดมุมซ้ายใต้ Navbar แสดง ลำดับ/ทั้งหมด + ชื่อ ด้วย Cross-fade
- * - ทุกองค์ประกอบเป็น aria-hidden และ pointer-events: none ไม่บังการคลิก
+ * SectionRail Component:
+ * แถบแสดงตำแหน่งหัวข้อที่กำลังอ่าน (Reading Position Indicator)
+ * - หน้าจอใหญ่ (Desktop): แสดงชื่อหัวข้อปัจจุบันและหัวข้อถัดไป
+ * - หน้าจอมือถือ (Mobile): แสดงชิปสรุปลำดับและชื่อหัวข้อแบบมินิมอล
  */
 export function SectionRail() {
   const {

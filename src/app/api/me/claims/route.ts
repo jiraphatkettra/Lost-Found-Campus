@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
         },
       });
 
-      // กฎ 4.1: ถ้า status ของ claim ไม่ใช่ ACCEPTED ให้ตัด contact ของ item ออก
+      // นโยบายความเป็นส่วนตัว: หากคำขอยังไม่ได้รับการยอมรับ (ACCEPTED) ให้ซ่อนข้อมูลติดต่อของประกาศไว้
       const sanitizedClaims = claims.map((claim) => {
         const canSeeContact = claim.status === "ACCEPTED";
         return {

@@ -19,12 +19,26 @@ import {
   ImageIcon,
 } from "lucide-react";
 
-export interface ItemFormProps {
+// 2. type ของ Props และ type ของข้อมูลในฟอร์ม
+export type ItemFormProps = {
   defaultValues?: Partial<CreateItemInput> & { customLocation?: string };
   onSubmit: (data: CreateItemInput) => Promise<void>;
   submitLabel?: string;
   isSubmitting?: boolean;
-}
+};
+
+// Type ของข้อมูลระหว่างกรอกในฟอร์ม (สกัดจาก Zod Schema ตามสไตล์อาจารย์)
+export type ItemFormValues = {
+  type: "LOST" | "FOUND";
+  title: string;
+  category: "BOOK" | "ELECTRONICS" | "CARD" | "BAG" | "CLOTHES" | "KEYS" | "OTHER";
+  location: string;
+  customLocation?: string;
+  date: string | Date;
+  description: string;
+  contact: string;
+  imageUrl?: string | null;
+};
 
 export function ItemForm({
   defaultValues,
@@ -32,6 +46,7 @@ export function ItemForm({
   submitLabel = "บันทึกข้อมูล",
   isSubmitting = false,
 }: ItemFormProps) {
+  // 3. กำหนดค่าเริ่มต้นของฟิลด์ข้อมูล
   const formattedDefaultDate = defaultValues?.date
     ? new Date(defaultValues.date).toISOString().split("T")[0]
     : new Date().toISOString().split("T")[0];
@@ -43,7 +58,7 @@ export function ItemForm({
     ? rawLocation.slice(6).trim()
     : defaultValues?.customLocation || "";
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
+  // 4. Hook จัดการฟอร์มด้วย React Hook Form + Zod Resolver
   const {
     register,
     handleSubmit,
@@ -51,8 +66,8 @@ export function ItemForm({
     control,
     clearErrors,
     formState: { errors },
-  } = useForm<any>({
-    resolver: zodResolver(createItemSchema),
+  } = useForm<ItemFormValues>({
+    resolver: zodResolver(createItemSchema) as any,
     defaultValues: {
       type: defaultValues?.type || "LOST",
       title: defaultValues?.title || "",
@@ -69,15 +84,20 @@ export function ItemForm({
 
   const selectedType = watch("type");
 
-  const handleValidSubmit = async (data: any) => {
+  // 5. ฟังก์ชันจัดการเหตุการณ์การส่งฟอร์ม (Event Handler)
+  const handleValidSubmit = async (data: ItemFormValues) => {
     const finalLocation =
       data.location === "OTHER" && data.customLocation?.trim()
         ? `OTHER: ${data.customLocation.trim()}`
         : data.location;
-    await onSubmit({ ...data, location: finalLocation } as CreateItemInput);
+    await onSubmit({
+      ...data,
+      date: new Date(data.date),
+      location: finalLocation,
+    } as CreateItemInput);
   };
-  /* eslint-enable @typescript-eslint/no-explicit-any */
 
+  // 6. return ส่วนแสดงผล JSX
   return (
     <form onSubmit={handleSubmit(handleValidSubmit)} className="space-y-4 sm:space-y-5">
       {/* หมวดที่ 1: ข้อมูลสิ่งของ */}

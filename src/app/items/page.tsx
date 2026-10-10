@@ -1,3 +1,4 @@
+// 1. นำเข้าโมดูลและคอมโพเนนต์
 import { Suspense } from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
@@ -9,7 +10,8 @@ import { ItemType, Category, ItemStatus, Prisma } from "@prisma/client";
 import { ItemCardData } from "@/types";
 import { Plus, AlertTriangle, Layers } from "lucide-react";
 
-interface ItemsPageProps {
+// 2. กำหนดชนิดข้อมูลของ Search Parameters (Dynamic Query Props)
+export type ItemsPageProps = {
   searchParams: Promise<{
     type?: string;
     q?: string;
@@ -20,18 +22,22 @@ interface ItemsPageProps {
     page?: string;
     limit?: string;
   }>;
-}
+};
 
+// 3. คอมโพเนนต์หน้ารายการของหายและของที่พบ (Server Component)
 export default async function ItemsPage({ searchParams }: ItemsPageProps) {
+  // อ่านค่าเงื่อนไขการค้นหาจาก URL Parameters
   const params = await searchParams;
   const { type, q, category, location, status, sort = "new" } = params;
 
+  // คำนวณการแบ่งหน้า (Pagination)
   const page = Math.max(1, parseInt(params.page || "1", 10) || 1);
   const limit = Math.min(24, Math.max(1, parseInt(params.limit || "12", 10) || 12));
   const skip = (page - 1) * limit;
 
+  // กำหนดเงื่อนไขการกรองข้อมูล (Query Filter)
   const where: Prisma.ItemWhereInput = {
-    isHidden: false, // กฎ v2 [MUST]: ไม่แสดงประกาศที่ถูกซ่อน
+    isHidden: false, // กรองเฉพาะประกาศที่เปิดเผยต่อสาธารณะ
   };
 
   if (type === "LOST" || type === "FOUND") {
@@ -99,7 +105,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10 lg:py-12">
-      {/* Page Header (Section 7.3: ชื่อ + คำอธิบาย + จำนวนผลลัพธ์) */}
+      {/* ส่วนหัวของหน้าเว็บ (Page Header) */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">

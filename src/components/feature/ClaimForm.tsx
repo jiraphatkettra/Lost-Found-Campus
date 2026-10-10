@@ -1,21 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+// 1. import ทั้งหมด
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { FormField } from "@/components/ui/FormField";
 import { HandHelping, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { contactRegex } from "@/lib/schemas";
+import { createClaimSchema, CreateClaimInput } from "@/lib/schemas";
 
-export interface ClaimFormProps {
+// 2. type ของ Props ของ Component ตามสไตล์อาจารย์
+export type ClaimFormProps = {
   itemId: string;
   itemType: "LOST" | "FOUND" | string;
   itemTitle: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
-}
+};
 
 export function ClaimForm({
   itemId,
@@ -25,69 +29,57 @@ export function ClaimForm({
   onClose,
   onSuccess,
 }: ClaimFormProps) {
-  const [message, setMessage] = useState("");
-  const [claimantContact, setClaimantContact] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  // 3. State และ Hook จัดการฟอร์มด้วย React Hook Form + Zod Schema
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<CreateClaimInput>({
+    resolver: zodResolver(createClaimSchema),
+    defaultValues: {
+      message: "",
+      claimantContact: "",
+    },
+  });
 
+  const messageValue = watch("message") || "";
   const isLost = itemType === "LOST";
   const modalTitle = isLost ? "ฉันเจอของชิ้นนี้" : "นี่คือของของฉัน";
 
-  const validate = () => {
-    const errs: Record<string, string> = {};
-    if (message.trim().length < 10) {
-      errs.message = "ข้อความต้องมีความยาวอย่างน้อย 10 ตัวอักษร";
-    } else if (message.trim().length > 500) {
-      errs.message = "ข้อความต้องไม่เกิน 500 ตัวอักษร";
-    }
-
-    if (!claimantContact.trim()) {
-      errs.claimantContact = "กรุณากรอกข้อมูลติดต่อของคุณ";
-    } else if (!contactRegex.test(claimantContact.trim())) {
-      errs.claimantContact = "ข้อมูลติดต่อต้องเป็นเบอร์โทรศัพท์ (0xxxxxxxxx) หรืออีเมลที่ถูกต้อง";
-    }
-
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-
+  // 4. ฟังก์ชันจัดการเหตุการณ์การส่งฟอร์ม (Event Handler)
+  const handleValidSubmit = async (data: CreateClaimInput) => {
     try {
-      setIsSubmitting(true);
       const res = await fetch(`/api/items/${itemId}/claims`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: message.trim(),
-          claimantContact: claimantContact.trim(),
+          message: data.message.trim(),
+          claimantContact: data.claimantContact.trim(),
         }),
       });
 
-      const data = await res.json();
+      const result = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "เกิดข้อผิดพลาดในการส่งคำขอ");
+        throw new Error(result.error || "เกิดข้อผิดพลาดในการส่งคำขอ");
       }
 
       toast.success("ส่งคำขอยืนยันเรียบร้อยแล้ว เจ้าของประกาศจะได้รับการแจ้งเตือน");
-      setMessage("");
-      setClaimantContact("");
-      setErrors({});
+      reset();
       onClose();
       if (onSuccess) onSuccess();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "เกิดข้อผิดพลาดในการส่งคำขอ";
       toast.error(msg);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
+  // 5. return ส่วนแสดงผล JSX
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={modalTitle}>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit(handleValidSubmit)} className="space-y-4" noValidate>
+        {/* ข้อความชี้แจง */}
         <div className="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-100 dark:border-blue-900/50 flex items-start gap-3 text-xs text-blue-800 dark:text-blue-300">
           <HandHelping className="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400 mt-0.5" />
           <p>
@@ -99,16 +91,16 @@ export function ClaimForm({
           </p>
         </div>
 
+        {/* ช่องกรอกข้อความยืนยัน */}
         <FormField
           label="ข้อความยืนยัน / รายละเอียดเพิ่มเติม"
           required
-          error={errors.message}
-          helperText={`ระบุจุดสังเกต หรือหลักฐานยืนยัน (${message.length}/500 ตัวอักษร)`}
+          error={errors.message?.message}
+          helperText={`ระบุจุดสังเกต หรือหลักฐานยืนยัน (${messageValue.length}/500 ตัวอักษร)`}
         >
           <textarea
             rows={4}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            {...register("message")}
             placeholder={
               isLost
                 ? "ระบุสถานที่หรือลักษณะของที่พบ เช่น พบวางอยู่บนโต๊ะชั้น 2..."
@@ -118,21 +110,22 @@ export function ClaimForm({
           />
         </FormField>
 
+        {/* ช่องกรอกข้อมูลติดต่อ */}
         <FormField
           label="ข้อมูลติดต่อของคุณ"
           required
-          error={errors.claimantContact}
+          error={errors.claimantContact?.message}
           helperText="เบอร์โทรศัพท์ (0812345678) หรืออีเมล"
         >
           <input
             type="text"
-            value={claimantContact}
-            onChange={(e) => setClaimantContact(e.target.value)}
+            {...register("claimantContact")}
             placeholder="0812345678 หรือ name@domain.com"
             className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           />
         </FormField>
 
+        {/* ปุ่มควบคุม */}
         <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
           <Button
             type="button"
@@ -146,6 +139,7 @@ export function ClaimForm({
             type="submit"
             variant="primary"
             loading={isSubmitting}
+            disabled={isSubmitting}
             leftIcon={<CheckCircle2 className="w-4 h-4" />}
           >
             ส่งคำขอ

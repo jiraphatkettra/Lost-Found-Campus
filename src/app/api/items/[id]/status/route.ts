@@ -37,7 +37,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // กฎ v2 [MUST]: เมื่อประกาศเปลี่ยนเป็น RETURNED ให้ Claim ที่ยัง PENDING ทั้งหมดกลายเป็น CANCELLED
+    // เมื่อประกาศเปลี่ยนสถานะเป็นส่งคืนแล้ว (RETURNED) ให้ยกเลิกคำขอที่ยังค้างอยู่ (PENDING) ทั้งหมดโดยอัตโนมัติผ่าน Transaction
     const updatedItem = await prisma.$transaction(async (tx) => {
       const item = await tx.item.update({
         where: { id },

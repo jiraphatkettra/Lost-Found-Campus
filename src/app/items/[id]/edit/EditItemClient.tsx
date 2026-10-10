@@ -1,5 +1,6 @@
 "use client";
 
+// 1. นำเข้าโมดูลและคอมโพเนนต์
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ItemForm } from "@/components/feature/ItemForm";
@@ -9,10 +10,17 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { ArrowLeft, Edit3 } from "lucide-react";
 
-export function EditItemClient({ item }: { item: Item }) {
+// 2. กำหนดชนิดข้อมูล Props ตามสไตล์อาจารย์
+export type EditItemClientProps = {
+  item: Item;
+};
+
+// 3. คอมโพเนนต์หน้าแก้ไขประกาศ (Client Component)
+export function EditItemClient({ item }: EditItemClientProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
+  // 4. ฟังก์ชันส่งข้อมูลการแก้ไขไปยัง API (PUT /api/items/[id])
   const handleSubmit = async (data: CreateItemInput) => {
     setLoading(true);
     try {

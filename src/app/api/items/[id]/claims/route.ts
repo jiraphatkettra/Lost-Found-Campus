@@ -97,7 +97,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "ไม่พบประกาศนี้" }, { status: 404 });
     }
 
-    // กฎ v2 [MUST]: ห้าม Claim ประกาศของตัวเอง
+    // ตรวจสอบความถูกต้อง: ไม่อนุญาตให้เจ้าของประกาศส่งคำขอยืนยันประกาศของตนเอง
     if (item.ownerId === session.user.id) {
       return NextResponse.json(
         { error: "ไม่สามารถส่งคำขอรับของในประกาศของตนเองได้" },
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // กฎ v2 [MUST]: ห้าม Claim ประกาศที่ RETURNED หรือ isHidden = true
+    // ตรวจสอบสถานะ: ประกาศที่ปิดแล้วหรือถูกซ่อน จะไม่สามารถส่งคำขอได้
     if (item.status === "RETURNED" || item.isHidden) {
       return NextResponse.json(
         { error: "ประกาศนี้ปิดรับคำขอแล้วหรือส่งคืนเรียบร้อยแล้ว" },
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Rate Limit (สูงสุด 20 รายการ / 24 ชั่วโมง)
+    // จำกัดจำนวนคำขอ (Rate Limiting: สูงสุด 20 รายการ ต่อ 24 ชั่วโมง)
     const rateCheck = await checkClaimRateLimit(session.user.id);
     if (!rateCheck.allowed) {
       return NextResponse.json(
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // กฎ v2 [MUST]: ผู้ใช้หนึ่งคนมี Claim ที่ PENDING หรือ ACCEPTED ได้ 1 รายการต่อ 1 ประกาศ
+    // ป้องกันคำขอซ้ำซ้อน: ผู้ใช้หนึ่งคนสามารถมีคำขอที่รอการตอบรับหรือยอมรับแล้วได้เพียง 1 รายการต่อ 1 ประกาศ
     const existingActiveClaim = await prisma.claim.findFirst({
       where: {
         itemId,

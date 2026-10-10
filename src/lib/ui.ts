@@ -1,12 +1,12 @@
 /**
- * Lost & Found Campus - Central UI Tokens and Classes (v2.1)
- * เก็บค่าคงที่คลาสสำหรับความสม่ำเสมอของ UI ทั่วทั้งระบบ
+ * Lost & Found Campus - UI Style Tokens
+ * รวมค่าคงที่คลาส Tailwind CSS สำหรับจัดระเบียบสไตล์ของส่วนติดต่อผู้ใช้ (UI) ทั่วทั้งระบบ
  */
 
-// 6.2 คอนเทนเนอร์กลางของเว็บ - ขอบซ้าย/ขวาตรงกันทุกหน้า
+// คอนเทนเนอร์หลักของหน้าเว็บ (Layout Container)
 export const CONTAINER = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
 
-// 6.1 Type Scale Classes (ยึดตามสเปก 6.1)
+// ขนาดตัวอักษรและน้ำหนัก (Typography & Type Scale)
 export const TYPE_SCALE = {
   h1: "text-2xl sm:text-3xl font-semibold leading-tight tracking-tight",
   h2: "text-base font-semibold",
@@ -16,7 +16,7 @@ export const TYPE_SCALE = {
   button: "text-sm font-medium",
 } as const;
 
-// 6.3 Surface Classes (จำกัดเพียง 3 แบบต่อหน้า)
+// รูปแบบพื้นหลังและการ์ดแสดงผล (Surface & Card Styles)
 export const SURFACES = {
   card: "rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900",
   subtle: "rounded-xl bg-slate-50 dark:bg-slate-800/50",

@@ -19,10 +19,12 @@ import { formatRelativeTime, formatFullThaiDateTime } from "@/lib/date";
 import { CONTAINER, TYPE_SCALE, SURFACES } from "@/lib/ui";
 import { Lock, ShieldAlert, Inbox, CheckCircle2 } from "lucide-react";
 
-interface ItemDetailPageProps {
+// 2. กำหนดชนิดข้อมูลของ Props สำหรับหน้ารายละเอียดแบบ Dynamic Route (ใบงานที่ 10)
+export type ItemDetailPageProps = {
   params: Promise<{ id: string }>;
-}
+};
 
+// 3. ฟังก์ชันสร้าง Metadata แบบไดนามิกตามข้อมูลจริงในฐานข้อมูล (generateMetadata)
 export async function generateMetadata({
   params,
 }: ItemDetailPageProps): Promise<Metadata> {
@@ -50,10 +52,13 @@ export async function generateMetadata({
   };
 }
 
+// 4. คอมโพเนนต์แสดงรายละเอียดประกาศสิ่งของ (Server Component)
 export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
+  // ดึงเซสชันผู้ใช้งานปัจจุบันและรหัสประกาศจาก URL
   const session = await auth();
   const { id } = await params;
 
+  // ค้นหาข้อมูลประกาศจากฐานข้อมูล
   const item = await prisma.item.findUnique({
     where: { id },
     include: {
@@ -68,6 +73,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
     },
   });
 
+  // หากไม่พบข้อมูลในฐานข้อมูล ให้แสดงหน้า 404 ผ่านฟังก์ชัน notFound()
   if (!item) {
     notFound();
   }
@@ -76,12 +82,12 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
   const isAdmin = session?.user?.role === "ADMIN";
   const isOwner = session?.user?.id === item.ownerId;
 
-  // กฎ 4.4: ถ้าถูกซ่อน ต้องเป็นเจ้าของหรือ ADMIN เท่านั้นที่ดูได้
+  // ตรวจสอบสิทธิ์: หากประกาศถูกซ่อน อนุญาตเฉพาะเจ้าของประกาศหรือผู้ดูแลระบบเท่านั้น
   if (item.isHidden && !isOwner && !isAdmin) {
     notFound();
   }
 
-  // กฎ 4.1: ตรวจสอบสิทธิ์การเปิดเผยข้อมูลติดต่อ
+  // ตรวจสอบสิทธิ์: นโยบายความเป็นส่วนตัวของข้อมูลติดต่อ
   const canSeeContact = await canViewItemContact(
     item.id,
     item.ownerId,
@@ -143,12 +149,12 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
 
   return (
     <div className={`${CONTAINER} py-6 sm:py-8 space-y-6 sm:space-y-8 pb-20 sm:pb-12`}>
-      {/* 5.1 แถวนำทางด้านบน */}
+      {/* ปุ่มนำทางย้อนกลับ (Navigation) */}
       <div className="pt-1">
         <BackButton fallbackHref="/items" label="กลับไปรายการ" />
       </div>
 
-      {/* 5.7 แบนเนอร์สถานะถูกซ่อน (เฉพาะเจ้าของ/ADMIN) */}
+      {/* แบนเนอร์สถานะถูกซ่อน (เฉพาะเจ้าของหรือผู้ดูแลระบบ) */}
       {item.isHidden && (
         <div className={`${SURFACES.accentRose} p-3.5 sm:p-4 flex items-center gap-3 text-rose-800 dark:text-rose-200 text-sm font-medium`}>
           <ShieldAlert className="w-5 h-5 shrink-0 text-rose-600 dark:text-rose-400" />
@@ -156,7 +162,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
         </div>
       )}
 
-      {/* 5.0 Main Grid Layout (2 คอลัมน์ 7/5 บนจอใหญ่) */}
+      {/* โครงสร้างการแสดงผลหลัก (Main Content Layout) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* คอลัมน์ซ้าย (7/12): ItemGallery 4:3 sticky */}
         <div className="lg:col-span-7">
@@ -225,9 +231,9 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
               />
             </div>
 
-            {/* Section 3: ลำดับเนื้อหาตามบทบาทผู้ดู (สเปก 5.4) */}
+            {/* ส่วนแสดงรายละเอียดและการจัดการตามสิทธิ์ผู้ใช้งาน */}
             <div className="pt-5 space-y-5">
-              {/* กรณี 1 & 2: ยังไม่ล็อกอิน หรือเป็นผู้ใช้ทั่วไป/PENDING -> ปุ่มหลักอยู่ก่อนรายละเอียด */}
+              {/* กรณีผู้ใช้ทั่วไปหรือยังไม่ได้ล็อกอิน: แสดงปุ่มดำเนินการหลัก */}
               {(!session?.user || (!isOwner && !isClaimAccepted)) && (
                 <div>
                   <ItemActions
@@ -245,7 +251,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
               {/* รายละเอียดประกาศ */}
               <ItemDescription description={item.description} />
 
-              {/* ข้อมูลติดต่อ (ตามสิทธิ์ 4.1) */}
+              {/* ข้อมูลติดต่อ (แสดงผลตามสิทธิ์และการตอบรับคำขอ) */}
               {canSeeContact ? (
                 <ContactCard
                   contact={item.contact}
@@ -254,7 +260,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
                   isAcceptedClaimant={isClaimAccepted}
                 />
               ) : (
-                /* ข้อความล็อกข้อมูลติดต่อ */
+                /* ข้อความล็อกข้อมูลติดต่อเพื่อความเป็นส่วนตัว */
                 <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-start gap-2.5 text-xs text-slate-500 dark:text-slate-400">
                   <Lock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
                   <span className="leading-relaxed">
@@ -263,7 +269,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
                 </div>
               )}
 
-              {/* แผงจัดการของเจ้าของประกาศ (OwnerPanel) */}
+              {/* แผงจัดการของเจ้าของประกาศ (Owner Actions) */}
               {isOwner && (
                 <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
                   <ItemActions
@@ -282,7 +288,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
         </div>
       </div>
 
-      {/* 5.0 ส่วนเต็มความกว้างใต้ Grid: คำขอที่ได้รับ (เฉพาะเจ้าของ) */}
+      {/* คำขอที่ได้รับ (แสดงเฉพาะเจ้าของประกาศ) */}
       {isOwner && (
         <section className="mt-10 sm:mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 space-y-5">
           <div className="flex items-center gap-2.5">
@@ -320,7 +326,7 @@ export default async function ItemDetailPage({ params }: ItemDetailPageProps) {
         </section>
       )}
 
-      {/* 5.0 ส่วนเต็มความกว้างใต้ Grid: รายการที่น่าจะตรงกัน (Match Suggestions) */}
+      {/* ประกาศที่อาจตรงกัน (Match Suggestions) */}
       <section className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
         <MatchSuggestions itemId={item.id} />
       </section>

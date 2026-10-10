@@ -1,23 +1,25 @@
 import { prisma } from "@/lib/prisma";
 import { Item } from "@prisma/client";
 
-export interface MatchScoreResult {
+// กำหนดชนิดข้อมูลผลลัพธ์การให้คะแนนความตรงกัน
+export type MatchScoreResult = {
   item: Item;
   score: number;
-}
+};
 
 /**
- * คำนวณคะแนนความตรงกันตามกฎหัวข้อ 6.7:
- * - ข้าม type (LOST ↔ FOUND) และ status = SEARCHING
- * - หมวดหมู่ตรงกัน: +3
- * - สถานที่ตรงกัน: +2
- * - วันที่ห่างกันไม่เกิน 7 วัน: +1
- * - คัดเฉพาะคะแนน >= 3 และส่งคืนสูงสุด 5 รายการ
+ * ฟังก์ชันค้นหาและจับคู่ประกาศที่น่าจะตรงกัน (Match Suggestions)
+ * หลักการคำนวณคะแนน (Scoring Algorithm):
+ * 1. ค้นหารายการที่มีประเภทตรงข้าม (เช่น หากเป็นของหาย จะจับคู่กับของที่พบ) และมีสถานะกำลังค้นหา (SEARCHING)
+ * 2. หมวดหมู่ตรงกัน: +3 คะแนน
+ * 3. สถานที่เกิดเหตุตรงกัน: +2 คะแนน
+ * 4. วันที่เกิดเหตุใกล้เคียงกันไม่เกิน 7 วัน: +1 คะแนน
+ * คัดเลือกเฉพาะรายการที่มีคะแนนตั้งแต่ 3 คะแนนขึ้นไป และส่งคืนสูงสุด 5 อันดับแรก
  */
 export async function findMatchingItems(targetItem: Item): Promise<Item[]> {
   const oppositeType = targetItem.type === "LOST" ? "FOUND" : "LOST";
 
-  // ดึงรายการที่ type ตรงข้าม และสถานะกำลังตามหา (SEARCHING)
+  // ดึงรายการที่มีประเภทตรงข้ามและยังไม่ปิดประกาศ
   const candidates = await prisma.item.findMany({
     where: {
       type: oppositeType,
@@ -42,30 +44,30 @@ export async function findMatchingItems(targetItem: Item): Promise<Item[]> {
   for (const candidate of candidates) {
     let score = 0;
 
-    // หมวดหมู่ตรงกัน +3
+    // หมวดหมู่ตรงกัน (+3 คะแนน)
     if (candidate.category === targetItem.category) {
       score += 3;
     }
 
-    // สถานที่ตรงกัน +2
+    // สถานที่ตรงกัน (+2 คะแนน)
     if (candidate.location === targetItem.location) {
       score += 2;
     }
 
-    // วันที่ห่างกันไม่เกิน 7 วัน (7 * 24 * 60 * 60 * 1000 ms) +1
+    // วันที่ห่างกันไม่เกิน 7 วัน (+1 คะแนน)
     const candidateDate = new Date(candidate.date).getTime();
     const diffDays = Math.abs(candidateDate - targetDate) / (1000 * 60 * 60 * 24);
     if (diffDays <= 7) {
       score += 1;
     }
 
-    // เฉพาะคะแนน >= 3
+    // กรองเฉพาะรายการที่คะแนนถึงเกณฑ์ (ตั้งแต่ 3 คะแนนขึ้นไป)
     if (score >= 3) {
       scored.push({ item: candidate, score });
     }
   }
 
-  // เรียงจากคะแนนมากไปน้อย ถ้าเท่ากันเรียงตามวันที่สร้างล่าสุด สูงสุด 5 รายการ
+  // เรียงลำดับจากคะแนนสูงสุดไปต่ำสุด หากคะแนนเท่ากันเรียงตามวันที่สร้างล่าสุด
   scored.sort((a, b) => {
     if (b.score !== a.score) {
       return b.score - a.score;

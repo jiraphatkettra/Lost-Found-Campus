@@ -1,3 +1,4 @@
+// 1. นำเข้าโมดูล คอมโพเนนต์ และไอคอน
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,10 +23,12 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { th } from "date-fns/locale";
 
-export interface ItemCardProps {
+// 2. กำหนดชนิดข้อมูลของ Props ตามสไตล์อาจารย์
+export type ItemCardProps = {
   item: ItemCardData;
-}
+};
 
+// 3. ตารางจับคู่ไอคอนประจำหมวดหมู่สิ่งของ
 const CategoryIconMap: Record<string, React.ReactNode> = {
   BOOK: <BookOpen className="w-10 h-10" />,
   ELECTRONICS: <Smartphone className="w-10 h-10" />,
@@ -36,6 +39,7 @@ const CategoryIconMap: Record<string, React.ReactNode> = {
   OTHER: <Package className="w-10 h-10" />,
 };
 
+// 4. คอมโพเนนต์การ์ดแสดงรายละเอียดประกาศสิ่งของ
 export function ItemCard({ item }: ItemCardProps) {
   const categoryConfig = CATEGORIES.find((c) => c.value === item.category);
   const categoryName = CATEGORY_LABEL_MAP[item.category] || item.category;
@@ -57,7 +61,7 @@ export function ItemCard({ item }: ItemCardProps) {
       href={`/items/${item.id}`}
       className="group block bg-white dark:bg-slate-900 rounded-2xl shadow-xs hover:shadow-lg border border-slate-200/80 dark:border-slate-800 overflow-hidden transition-all duration-200 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
-      {/* 4:3 Image Area or Placeholder (Section 7.2) */}
+      {/* ส่วนแสดงรูปภาพหรือภาพแทนตามหมวดหมู่ (Image / Category Placeholder) */}
       <div className="relative w-full aspect-4/3 bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
         {item.imageUrl ? (
           <Image
@@ -68,7 +72,7 @@ export function ItemCard({ item }: ItemCardProps) {
             className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          /* Placeholder with category icon & gradient (Section 8.2) */
+          /* ภาพแทน (Placeholder) แสดงไอคอนประจำหมวดหมู่เมื่อไม่มีรูปภาพ */
           <div
             className={`w-full h-full flex flex-col items-center justify-center bg-gradient-to-br ${
               categoryConfig?.gradient ||

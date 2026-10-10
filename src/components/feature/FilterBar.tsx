@@ -1,5 +1,6 @@
 "use client";
 
+// 1. นำเข้าโมดูลและคอมโพเนนต์
 import React, { useState, useEffect, useTransition, useCallback } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { CATEGORIES, LOCATIONS, ITEM_STATUSES, formatLocationName } from "@/lib/constants";
@@ -14,12 +15,14 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 
+// 2. คอมโพเนนต์แถบค้นหาและตัวกรองประกาศสิ่งของ (FilterBar)
 export function FilterBar() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
 
+  // 3. อ่านค่าเงื่อนไขตัวกรองปัจจุบันจาก URL Query String
   const currentType = searchParams.get("type") || "";
   const currentCategory = searchParams.get("category") || "";
   const currentLocation = searchParams.get("location") || "";
@@ -27,6 +30,7 @@ export function FilterBar() {
   const currentSort = searchParams.get("sort") || "new";
   const initialQ = searchParams.get("q") || "";
 
+  // 4. สถานะภายในคอมโพเนนต์สำหรับช่องค้นหาและ Modal
   const [searchTerm, setSearchTerm] = useState(initialQ);
   const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
 

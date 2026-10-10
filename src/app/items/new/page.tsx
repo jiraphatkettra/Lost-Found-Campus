@@ -1,5 +1,6 @@
 "use client";
 
+// 1. นำเข้าโมดูลและคอมโพเนนต์
 import React, { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ItemForm } from "@/components/feature/ItemForm";
@@ -8,6 +9,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { ArrowLeft, PlusCircle } from "lucide-react";
 
+// 2. เนื้อหาฟอร์มสร้างประกาศใหม่ (Client Component)
 function NewItemContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -16,6 +18,7 @@ function NewItemContent() {
 
   const [loading, setLoading] = useState(false);
 
+  // 3. ฟังก์ชันส่งข้อมูลสร้างประกาศใหม่ไปยัง API (Event Handler)
   const handleSubmit = async (data: CreateItemInput) => {
     setLoading(true);
     try {

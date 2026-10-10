@@ -45,7 +45,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "ไม่พบข้อมูลประกาศนี้" }, { status: 404 });
     }
 
-    // กฎ 4.4: ถ้าถูกซ่อน (isHidden) เฉพาะเจ้าของหรือ ADMIN เท่านั้นที่มองเห็นได้
+    // ตรวจสอบสิทธิ์: หากประกาศถูกซ่อน อนุญาตเฉพาะเจ้าของประกาศหรือผู้ดูแลระบบเท่านั้น
     const isOwner = session?.user?.id === item.ownerId;
     // @ts-expect-error - session user role
     const isAdmin = session?.user?.role === "ADMIN";
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "ไม่พบข้อมูลประกาศนี้" }, { status: 404 });
     }
 
-    // กฎ 4.1 [MUST]: ตรวจสอบการเปิดเผยข้อมูลติดต่อ
+    // ตรวจสอบสิทธิ์การเปิดเผยข้อมูลติดต่อของผู้ลงประกาศ
     const canSeeContact = await canViewItemContact(
       item.id,
       item.ownerId,

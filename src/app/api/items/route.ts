@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
       }),
     ]);
 
-    // กฎ v2 [MUST]: ตัดฟิลด์ contact ออกจาก response รายการสาธารณะอย่างเข้มงวด
+    // นโยบายความปลอดภัย: ตัดฟิลด์ข้อมูลติดต่อ (contact) ออกจากผลลัพธ์รายการสาธารณะเพื่อความเป็นส่วนตัว
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const sanitizedItems = items.map(({ contact: _, ...rest }) => rest);
 

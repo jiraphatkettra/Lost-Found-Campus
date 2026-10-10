@@ -1,16 +1,16 @@
 import React from "react";
 
-export interface SectionHeaderRuleProps {
+// กำหนดชนิดข้อมูล Props ของเส้นแบ่งหัวข้อ
+export type SectionHeaderRuleProps = {
   index: string;
   title: string;
   subtitle?: string;
   className?: string;
-}
+};
 
 /**
- * SectionHeaderRule (v2.3 Motion Layer - B5):
- * แถบเส้นบางคั่นหัว Section พร้อมเลขลำดับ (เช่น 02 / ภาพรวม) และคำอธิบายสั้น
- * ช่วยบอกตำแหน่งและลำดับสายตาตามวิดีโออ้างอิง โดยไม่กระทบเลย์เอาต์เดิม
+ * SectionHeaderRule Component:
+ * แถบเส้นบางคั่นหัวข้อพร้อมเลขลำดับและชื่อส่วน ช่วยจัดลำดับสายตาในหน้าแรก
  */
 export function SectionHeaderRule({
   index,

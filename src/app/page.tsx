@@ -1,3 +1,4 @@
+// 1. นำเข้าโมดูลและคอมโพเนนต์
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
@@ -11,60 +12,67 @@ import { ItemCardData } from "@/types";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { Reveal } from "@/components/motion/Reveal";
 
-export const revalidate = 60; // แคช 60 วินาทีตามสเปก Section 7.1
+// กำหนดระยะเวลา Revalidation 60 วินาที (Incremental Static Regeneration)
+export const revalidate = 60;
 
+// 2. คอมโพเนนต์หน้าแรก (Server Component)
 export default async function HomePage() {
+  // คำนวณช่วงเวลาย้อนหลัง 7 วัน
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-  // คำนวณสถิติจากฐานข้อมูลจริง (ไม่นับ isHidden) พร้อมระบบป้องกันกรณีเชื่อมต่อฐานข้อมูลไม่ได้ตอน build บน Vercel
+  // ดึงข้อมูลสถิติและประกาศล่าสุดจากฐานข้อมูลฝั่งเซิร์ฟเวอร์
   let searchingCount = 0;
   let returnedCount = 0;
   let recentCount = 0;
-  let latestItems: any[] = [];
+  let latestItems: ItemCardData[] = [];
 
   try {
-    [searchingCount, returnedCount, recentCount, latestItems] =
-      await Promise.all([
-        prisma.item.count({
-          where: {
-            status: "SEARCHING",
-            isHidden: false,
-          },
-        }),
-        prisma.item.count({
-          where: {
-            status: "RETURNED",
-            isHidden: false,
-          },
-        }),
-        prisma.item.count({
-          where: {
-            createdAt: { gte: oneWeekAgo },
-            isHidden: false,
-          },
-        }),
-        prisma.item.findMany({
-          where: {
-            isHidden: false,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-          take: 6,
-          include: {
-            owner: {
-              select: {
-                id: true,
-                name: true,
-                image: true,
-              },
+    const [searching, returned, recent, fetchedItems] = await Promise.all([
+      prisma.item.count({
+        where: {
+          status: "SEARCHING",
+          isHidden: false,
+        },
+      }),
+      prisma.item.count({
+        where: {
+          status: "RETURNED",
+          isHidden: false,
+        },
+      }),
+      prisma.item.count({
+        where: {
+          createdAt: { gte: oneWeekAgo },
+          isHidden: false,
+        },
+      }),
+      prisma.item.findMany({
+        where: {
+          isHidden: false,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 6,
+        include: {
+          owner: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
             },
           },
-        }),
-      ]);
+        },
+      }),
+    ]);
+
+    searchingCount = searching;
+    returnedCount = returned;
+    recentCount = recent;
+    latestItems = fetchedItems as ItemCardData[];
   } catch (error) {
-    console.error("Home page: Failed to fetch items/stats from database (check DATABASE_URL):", error);
+    console.error("Home page: เกิดข้อผิดพลาดในการดึงข้อมูลจากฐานข้อมูล:", error);
   }
 
   return (
@@ -123,7 +131,7 @@ export default async function HomePage() {
               }}
             />
           ) : (
-            <RecentItemsSlider items={latestItems as unknown as ItemCardData[]} />
+            <RecentItemsSlider items={latestItems} />
           )}
         </section>
 

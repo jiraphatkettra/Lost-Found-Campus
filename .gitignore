@@ -50,3 +50,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# internal docs & guides
+*.docx
+SKILL.md
+LostAndFound_Complete_Presentation_Guide.md
+LostAndFound_Tutor_Presentation_Prompt.md

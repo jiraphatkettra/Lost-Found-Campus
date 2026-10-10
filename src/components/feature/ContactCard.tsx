@@ -1,17 +1,20 @@
 "use client";
 
+// 1. นำเข้าโมดูลและไอคอน
 import React, { useState } from "react";
 import { Phone, Copy, Check, ShieldCheck, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { SURFACES } from "@/lib/ui";
 
-export interface ContactCardProps {
+// 2. กำหนดชนิดข้อมูล Props ตามสไตล์อาจารย์
+export type ContactCardProps = {
   contact: string;
   isOwner?: boolean;
   isAdmin?: boolean;
   isAcceptedClaimant?: boolean;
-}
+};
 
+// 3. คอมโพเนนต์การ์ดแสดงข้อมูลติดต่อ (ContactCard)
 export function ContactCard({
   contact,
   isOwner = false,
@@ -20,6 +23,7 @@ export function ContactCard({
 }: ContactCardProps) {
   const [copied, setCopied] = useState(false);
 
+  // ฟังก์ชันคัดลอกข้อมูลติดต่อลงใน Clipboard
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(contact);
@@ -35,7 +39,7 @@ export function ContactCard({
   const cleanPhone = contact.replace(/[^0-9]/g, "");
   const isPhoneNumber = cleanPhone.length >= 9 && cleanPhone.length <= 11;
 
-  // ข้อความแยกตามบทบาทผู้ดูตามสเปก v2.1 หัวข้อ 5.5
+  // กำหนดข้อความและป้ายสถานะตามบทบาทของผู้ดู (เจ้าของ / ผู้ขอที่ได้รับการตอบรับ / ผู้ดูแลระบบ)
   let headerTitle = "ข้อมูลติดต่อ";
   let statusBadge: React.ReactNode = null;
   let helperNote = "สามารถติดต่อเพื่อนัดหมายส่งมอบของ หรือสอบถามรายละเอียดเพิ่มเติมได้ทันที";

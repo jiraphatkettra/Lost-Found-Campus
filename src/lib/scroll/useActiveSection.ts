@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 
-export interface SectionItem {
+// 1. กำหนดชนิดข้อมูลของ Section และสถานะการเลื่อนหน้าจอ
+export type SectionItem = {
   id: string;
   label: string;
   sublabel?: string;
   index: number;
-}
+};
 
 export const DEFAULT_HOME_SECTIONS: SectionItem[] = [
   { id: "hero", label: "ค้นหาของ", sublabel: "ศูนย์ช่วยเหลือ ม.แม่โจ้", index: 1 },
@@ -17,22 +18,22 @@ export const DEFAULT_HOME_SECTIONS: SectionItem[] = [
   { id: "cta-bottom", label: "เริ่มเลย", sublabel: "สร้างประกาศ", index: 5 },
 ];
 
-export interface ActiveSectionState {
+export type ActiveSectionState = {
   activeSection: SectionItem;
   activeIndex: number;
   previousSection: SectionItem | null;
   nextSections: SectionItem[];
   totalSections: number;
-}
+};
 
-export interface UseActiveSectionOptions {
+export type UseActiveSectionOptions = {
   readingLineRatio?: number; // สัดส่วนตำแหน่งเส้นอ่าน (ค่าเริ่มต้น 0.55 = 55% vh)
   sections?: SectionItem[];
-}
+};
 
 /**
- * Hook สำหรับระบุ Section ที่กำลังแสดงผลอยู่ตรงเส้นอ่าน (Reading Line)
- * ใช้สำหรับป้าย SectionRail (B6) และแถบหัว Section (B5)
+ * Custom Hook: useActiveSection
+ * สำหรับระบุหัวข้อ (Section) ที่กำลังแสดงผลอยู่บนหน้าจอตามการเลื่อน (Scroll Position)
  */
 export function useActiveSection(
   options: UseActiveSectionOptions = {}
